@@ -1,0 +1,70 @@
+{
+  "name": "@roadiehq/backstage-plugin-argo-cd",
+  "version": "0.1.0",
+  "main": "src/index.ts",
+  "types": "src/index.ts",
+  "license": "Apache-2.0",
+  "publishConfig": {
+    "access": "public",
+    "main": "dist/index.esm.js",
+    "types": "dist/index.d.ts"
+  },
+  "scripts": {
+    "build": "backstage-cli plugin:build",
+    "build-rollup": "rollup -c",
+    "start": "backstage-cli plugin:serve",
+    "lint": "backstage-cli lint",
+    "test": "backstage-cli test",
+    "diff": "backstage-cli plugin:diff",
+    "prepack": "backstage-cli prepack",
+    "postpack": "backstage-cli postpack",
+    "clean": "backstage-cli clean"
+  },
+  "dependencies": {
+    "@backstage/catalog-model": "^0.2.0",
+    "@backstage/core": "^0.3.0",
+    "@backstage/core-api": "^0.2.1",
+    "@backstage/plugin-catalog": "^0.2.1",
+    "@backstage/theme": "^0.2.1",
+    "@material-ui/core": "^4.9.1",
+    "@material-ui/icons": "^4.9.1",
+    "@material-ui/lab": "4.0.0-alpha.45",
+    "date-fns": "^2.15.0",
+    "history": "^5.0.0",
+    "moment": "^2.27.0",
+    "react": "^16.13.1",
+    "react-dom": "^16.13.1",
+    "react-lazylog": "^4.5.2",
+    "react-router": "6.0.0-beta.0",
+    "react-router-dom": "6.0.0-beta.0",
+    "react-use": "^15.3.3"
+  },
+  "devDependencies": {
+    "@backstage/cli": "^0.2.0",
+    "@backstage/dev-utils": "^0.1.3",
+    "@backstage/test-utils": "^0.1.2",
+    "@rollup/plugin-commonjs": "^14.0.0",
+    "@rollup/plugin-node-resolve": "^8.4.0",
+    "@testing-library/jest-dom": "^5.10.1",
+    "@testing-library/react": "^10.4.1",
+    "@testing-library/user-event": "^12.0.7",
+    "@types/jest": "^25.2.2",
+    "@types/node": "^12.0.0",
+    "@typescript-eslint/eslint-plugin": "^3.8.0",
+    "@typescript-eslint/parser": "^3.8.0",
+    "cypress": "^4.11.0",
+    "esbuild": "^0.6.18",
+    "eslint": "^7.6.0",
+    "eslint-plugin-cypress": "^2.11.1",
+    "eslint-plugin-react": "^7.20.5",
+    "jest-fetch-mock": "^3.0.3",
+    "msw": "^0.19.5",
+    "rollup": "^2.33.1",
+    "rollup-plugin-dts": "^1.4.13",
+    "rollup-plugin-esbuild": "^2.4.2",
+    "rollup-plugin-peer-deps-external": "^2.2.3"
+  },
+  "files": [
+    "dist"
+  ]
+}
