@@ -3,7 +3,7 @@ import {
   createPlugin,
   discoveryApiRef,
 } from '@backstage/core';
-import { ArgoCDApiMock, ArgoCDApiClient, argoCDApiRef } from './api';
+import { ArgoCDApiClient, argoCDApiRef } from './api';
 
 export const plugin = createPlugin({
   id: 'argocd',
@@ -11,7 +11,7 @@ export const plugin = createPlugin({
     createApiFactory({
       api: argoCDApiRef,
       deps: { discoveryApi: discoveryApiRef },
-      factory: ({ discoveryApi }) => new ArgoCDApiMock({ discoveryApi }),
+      factory: ({ discoveryApi }) => new ArgoCDApiClient({ discoveryApi }),
     }),
   ],
 });

@@ -26,11 +26,13 @@ proxy:
   ...
 
   '/argocd/api':
-    target: 
-        $env: ARGOCD_URL
+    # url to the api of your hosted argoCD instance
+    target: https://159.65.209.132/api/v1/
     changeOrigin: true
+    # this line is required if your hosted argoCD instance has self-signed certificate
+    secure: false
     headers:
-      Authorization:
+      Cookie:
         $env: ARGOCD_AUTH_TOKEN
 
 
@@ -58,11 +60,10 @@ Argo-cd plugin is a part of the Backstage sample app. To start using it for your
 argo-cd/appname: <app-name>
 ```
 
-1. add your bearer key to the environmental variables for your backstage backend server (you can acquire it by sending a GET http request to /session endpoint with username and password):
+1. add your auth key to the environmental variables for your backstage backend server (you can acquire it by sending a GET http request to /session endpoint with username and password):
 ```
-ARGOCD_URL="<argo-cd-url>/api/v1"
-ARGOCD_AUTH_TOKEN="Bearer <bearer-token>"
-
+ARGOCD_AUTH_TOKEN="argocd.token=<auth-token>"
+```
 ## Develop plugin locally
 
 You can clone the plugin repo into the `plugins/` directory:

@@ -9,7 +9,7 @@ export const argoCDApiRef = createApiRef<ArgoCDApi>({
 export interface ArgoCDApi {
   getAppDetails(options: { appName: string }): Promise<ArgoCDAppDetails>;
 }
-const DEFAULT_PROXY_PATH = '/argoCD/api';
+const DEFAULT_PROXY_PATH = '/argocd/api';
 
 type Options = {
   discoveryApi: DiscoveryApi;
