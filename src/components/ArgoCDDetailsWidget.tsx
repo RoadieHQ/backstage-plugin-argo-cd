@@ -23,9 +23,7 @@ import {
   Divider,
   CardContent,
   makeStyles,
-  Link,
   LinearProgress,
-  Tooltip,
 } from '@material-ui/core';
 import { Entity } from '@backstage/catalog-model';
 import moment from 'moment';
@@ -35,8 +33,6 @@ import ErrorBoundary from './ErrorBoundary';
 import { isPluginApplicableToEntity } from '../Router';
 import { useAppDetails } from './useAppDetails';
 import { ArgoCDAppDetails } from '../types';
-
-type States = 'Pending' | 'Active' | 'Inactive' | 'Failed';
 
 const useStyles = makeStyles(theme => ({
   links: {
@@ -126,7 +122,6 @@ const State = ({ value }: { value: string }) => {
   );
 };
 const OverviewComponent = ({ data }: { data: ArgoCDAppDetails }) => {
-  const classes = useStyles();
   return (
     <Card>
       <CardHeader

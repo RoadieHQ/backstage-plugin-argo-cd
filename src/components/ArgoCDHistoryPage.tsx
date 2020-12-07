@@ -18,5 +18,5 @@ import { Entity } from '@backstage/catalog-model';
 import React from 'react';
 
 export const ArgoCDHistoryPage = ({ entity }: { entity: Entity }) => {
-  return <div></div>;
+  return <div />;
 };

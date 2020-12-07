@@ -38,18 +38,7 @@ export class ArgoCDApiClient implements ArgoCDApi {
 }
 
 export class ArgoCDApiMock implements ArgoCDApi {
-  private readonly discoveryApi: DiscoveryApi;
-  private readonly proxyPath: string;
-
-  constructor(options: Options) {
-    this.discoveryApi = options.discoveryApi;
-    this.proxyPath = options.proxyPath ?? DEFAULT_PROXY_PATH;
-  }
-
-  private async getApiUrl() {
-    const proxyUrl = await this.discoveryApi.getBaseUrl('proxy');
-    return `${proxyUrl}${this.proxyPath}`;
-  }
+  constructor(options: Options) {}
 
   async getAppDetails(options: { appName: string }) {
     return {
