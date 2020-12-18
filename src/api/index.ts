@@ -1,15 +1,15 @@
-import { createApiRef, DiscoveryApi } from '@backstage/core';
-import { ArgoCDAppDetails } from '../types';
+import { createApiRef, DiscoveryApi } from "@backstage/core";
+import { ArgoCDAppDetails } from "../types";
 
 export const argoCDApiRef = createApiRef<ArgoCDApi>({
-  id: 'plugin.argocd.service',
-  description: 'Used by the ArgoCD plugin to make requests',
+  id: "plugin.argocd.service",
+  description: "Used by the ArgoCD plugin to make requests",
 });
 
 export interface ArgoCDApi {
   getAppDetails(options: { appName: string }): Promise<ArgoCDAppDetails>;
 }
-const DEFAULT_PROXY_PATH = '/argocd/api';
+const DEFAULT_PROXY_PATH = "/argocd/api";
 
 type Options = {
   discoveryApi: DiscoveryApi;
@@ -26,7 +26,7 @@ export class ArgoCDApiClient implements ArgoCDApi {
   }
 
   private async getApiUrl() {
-    const proxyUrl = await this.discoveryApi.getBaseUrl('proxy');
+    const proxyUrl = await this.discoveryApi.getBaseUrl("proxy");
     return `${proxyUrl}${this.proxyPath}`;
   }
 
@@ -38,22 +38,24 @@ export class ArgoCDApiClient implements ArgoCDApi {
 }
 
 export class ArgoCDApiMock implements ArgoCDApi {
+  //@ts-ignore
   constructor(options: Options) {}
 
+  //@ts-ignore
   async getAppDetails(options: { appName: string }) {
     return {
       metadata: {
-        name: 'guestbook',
+        name: "guestbook",
       },
       status: {
         sync: {
-          status: 'Synced',
+          status: "Synced",
         },
         health: {
-          status: 'Healthy',
+          status: "Healthy",
         },
         operationState: {
-          finishedAt: '2020-11-18T16:47:04Z',
+          finishedAt: "2020-11-18T16:47:04Z",
         },
       },
     };
