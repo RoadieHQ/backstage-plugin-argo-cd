@@ -14,6 +14,7 @@ jobs:
       uses: actions/setup-node@main
       with:
         node-version: 12.18.3
+    - run: yarn install
     - name: Publish if version has been updated
       uses: pascalgn/npm-publish-action@06e0830ea83eea10ed4a62654eeaedafb8bf50fc
       with:
