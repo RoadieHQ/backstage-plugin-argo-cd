@@ -17,17 +17,17 @@ import React from 'react';
 import { Entity } from '@backstage/catalog-model';
 import { Routes, Route } from 'react-router-dom';
 import { ArgoCDHistoryPage } from './components/ArgoCDHistoryPage';
-import { ARGOCD_ANNOTATION } from './components/useArgoCDAppData';
+import { ARGOCD_ANNOTATION_APP_NAME, ARGOCD_ANNOTATION_APP_SELECTOR } from './components/useArgoCDAppData';
 import { MissingAnnotationEmptyState } from '@backstage/core';
 
 type Props = { entity: Entity };
 
 export const isPluginApplicableToEntity = (entity: Entity) =>
-  Boolean(entity?.metadata.annotations?.[ARGOCD_ANNOTATION]);
+  Boolean(entity?.metadata.annotations?.[ARGOCD_ANNOTATION_APP_NAME]) || Boolean(entity?.metadata.annotations?.[ARGOCD_ANNOTATION_APP_SELECTOR]);
 
 export const Router: React.FC<Props> = ({ entity }) =>
   !isPluginApplicableToEntity(entity) ? (
-    <MissingAnnotationEmptyState annotation={ARGOCD_ANNOTATION} />
+    <MissingAnnotationEmptyState annotation={ARGOCD_ANNOTATION_APP_NAME} />
   ) : (
     <Routes>
       <Route path="/" element={<ArgoCDHistoryPage entity={entity} />} />

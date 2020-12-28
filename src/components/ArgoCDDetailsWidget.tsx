@@ -17,84 +17,28 @@ import React from 'react';
 import {
   Typography,
   Box,
-  Grid,
   Card,
   CardHeader,
-  Divider,
   CardContent,
-  makeStyles,
   LinearProgress,
+  Table,
+  TableRow,
+  TableHead,
+  TableCell,
+  TableBody,
 } from '@material-ui/core';
 import { Entity } from '@backstage/catalog-model';
 import moment from 'moment';
-import { ARGOCD_ANNOTATION, useArgoCDAppData } from './useArgoCDAppData';
+import { ARGOCD_ANNOTATION_APP_NAME, useArgoCDAppData } from './useArgoCDAppData';
 import { MissingAnnotationEmptyState } from '@backstage/core';
 import ErrorBoundary from './ErrorBoundary';
 import { isPluginApplicableToEntity } from '../Router';
-import { useAppDetails } from './useAppDetails';
-import { ArgoCDAppDetails } from '../types';
-
-const useStyles = makeStyles(theme => ({
-  links: {
-    margin: theme.spacing(2, 0),
-    display: 'grid',
-    gridAutoFlow: 'column',
-    gridAutoColumns: 'min-content',
-    gridGap: theme.spacing(3),
-  },
-  label: {
-    color: theme.palette.text.secondary,
-    textTransform: 'uppercase',
-    fontSize: '10px',
-    fontWeight: 'bold',
-    letterSpacing: 0.5,
-    overflow: 'hidden',
-    whiteSpace: 'nowrap',
-  },
-  value: {
-    fontWeight: 'bold',
-    overflow: 'hidden',
-    lineHeight: '24px',
-    wordBreak: 'break-word',
-  },
-  description: {
-    wordBreak: 'break-word',
-  },
-}));
+import { ArgoCDAppDetails, ArgoCDAppList } from '../types';
+import { useListAppDetails } from "./useListAppDetails";
+import { useAppDetails } from "./useAppDetails";
 
 const getElapsedTime = (start: string) => {
   return moment(start).fromNow();
-};
-
-const AboutField = ({
-  label,
-  value,
-  gridSizes,
-  children,
-}: {
-  label: string;
-  value?: string | JSX.Element;
-  gridSizes?: Record<string, number>;
-  children?: React.ReactNode;
-}) => {
-  const classes = useStyles();
-
-  // Content is either children or a string prop `value`
-  const content = React.Children.count(children) ? (
-    children
-  ) : (
-    <Typography variant="body2" className={classes.value}>
-      {value || `unknown`}
-    </Typography>
-  );
-  return (
-    <Grid item {...gridSizes}>
-      <Typography variant="subtitle2" className={classes.label}>
-        {label}
-      </Typography>
-      {content}
-    </Grid>
-  );
 };
 
 const State = ({ value }: { value: string }) => {
@@ -121,28 +65,34 @@ const State = ({ value }: { value: string }) => {
     </Box>
   );
 };
-const OverviewComponent = ({ data }: { data: ArgoCDAppDetails }) => {
+
+const OverviewComponent = ({ data }: { data: ArgoCDAppList }) => {
   return (
     <Card>
       <CardHeader
-        title={<Typography variant="h5">ArgoCD</Typography>}
-        subheader={<Typography variant="h6">{data.metadata.name}</Typography>}
+        title={<Typography variant="h5">ArgoCD overview</Typography>}
       />
-      <Divider />
       <CardContent>
-        <Grid container>
-          <AboutField label="Sync" gridSizes={{ xs: 12, sm: 6, lg: 4 }}>
-            <State value={data.status.sync.status} />
-          </AboutField>
-          <AboutField label="Health" gridSizes={{ xs: 12, sm: 6, lg: 4 }}>
-            <State value={data.status.health.status} />
-          </AboutField>
-          <AboutField
-            label="Last deploy"
-            value={getElapsedTime(data.status.operationState.finishedAt!)}
-            gridSizes={{ xs: 12, sm: 6, lg: 4 }}
-          />
-        </Grid>
+        <Table size="small">
+          <TableHead>
+            <TableRow>
+              <TableCell>Name</TableCell>
+              <TableCell>Sync Status</TableCell>
+              <TableCell>Health Status</TableCell>
+              <TableCell>Last Synced</TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {data.items.map((data: ArgoCDAppDetails) => (
+              <TableRow key={data.metadata.name}>
+              <TableCell component="th" scope="row">{data.metadata.name}</TableCell>
+              <TableCell component="th" scope="row"><State value={data.status.sync.status}/></TableCell>
+              <TableCell component="th" scope="row"><State value={data.status.health.status}/></TableCell>
+              <TableCell component="th" scope="row">{getElapsedTime(data.status.operationState.finishedAt!)}</TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
       </CardContent>
     </Card>
   );
@@ -150,7 +100,7 @@ const OverviewComponent = ({ data }: { data: ArgoCDAppDetails }) => {
 
 export const ArgoCDDetailsWidget = ({ entity }: { entity: Entity }) => {
   return !isPluginApplicableToEntity(entity) ? (
-    <MissingAnnotationEmptyState annotation={ARGOCD_ANNOTATION} />
+    <MissingAnnotationEmptyState annotation={ARGOCD_ANNOTATION_APP_NAME} />
   ) : (
     <ErrorBoundary>
       <ArgoCDDetails entity={entity} />
@@ -159,10 +109,10 @@ export const ArgoCDDetailsWidget = ({ entity }: { entity: Entity }) => {
 };
 
 const ArgoCDDetails = ({ entity }: { entity: Entity }) => {
-  const appName = useArgoCDAppData({ entity });
+  const { appName, appSelector } = useArgoCDAppData({ entity });
 
-  const { loading, value, error } = useAppDetails({
-    appName,
+  const { loading, value, error } = !!appName ? useAppDetails({ appName }) : useListAppDetails({
+    appSelector
   });
   if (loading) {
     return (
@@ -180,9 +130,20 @@ const ArgoCDDetails = ({ entity }: { entity: Entity }) => {
         <CardHeader
           title={<Typography variant="h5">ArgoCD overview</Typography>}
         />
-        Error occured while fetching data. {error.name}: {error.message}
+        Error occurred while fetching data. {error.name}: {error.message}
       </Card>
     );
   }
-  return value ? <OverviewComponent data={value} /> : null;
+  if (value) {
+    if ((value as ArgoCDAppList).items !== undefined) {
+      return <OverviewComponent data={value as ArgoCDAppList} />
+    } else {
+      const wrapped: ArgoCDAppList = {
+        items: [value as ArgoCDAppDetails]
+      }
+      return <OverviewComponent data={wrapped} />
+    }
+  } else {
+    return null
+  }
 };
