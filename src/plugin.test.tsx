@@ -65,6 +65,8 @@ describe("argo-cd", () => {
         </ApiProvider>
       );
       expect(await rendered.findByText("guestbook")).toBeInTheDocument();
+      expect(await rendered.findByText("Synced")).toBeInTheDocument();
+      expect(await rendered.findByText("Healthy")).toBeInTheDocument();
     });
   });
 });
@@ -93,7 +95,11 @@ const getEntityStub = () => ({
   },
   relations: [
     {
-      target: { kind: "group", namespace: "default", name: "david@roadie.io" },
+      target: {
+        kind: "group",
+        namespace: "default",
+        name: "david@roadie.io",
+      },
       type: "ownedBy",
     },
   ],

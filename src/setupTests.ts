@@ -1,3 +1,3 @@
-import '@testing-library/jest-dom';
+import "@testing-library/jest-dom";
 
-require('jest-fetch-mock').enableMocks();
+require("jest-fetch-mock").enableMocks();

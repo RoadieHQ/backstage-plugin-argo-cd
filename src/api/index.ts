@@ -1,4 +1,5 @@
 import { createApiRef, DiscoveryApi } from "@backstage/core";
+import fetch from "cross-fetch";
 import { ArgoCDAppDetails } from "../types";
 
 export const argoCDApiRef = createApiRef<ArgoCDApi>({
