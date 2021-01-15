@@ -34,7 +34,6 @@ import { MissingAnnotationEmptyState } from '@backstage/core';
 import ErrorBoundary from './ErrorBoundary';
 import { isPluginApplicableToEntity } from '../Router';
 import { ArgoCDAppDetails, ArgoCDAppList } from '../types';
-import { useListAppDetails } from "./useListAppDetails";
 import { useAppDetails } from "./useAppDetails";
 
 const getElapsedTime = (start: string) => {
@@ -111,9 +110,7 @@ export const ArgoCDDetailsWidget = ({ entity }: { entity: Entity }) => {
 const ArgoCDDetails = ({ entity }: { entity: Entity }) => {
   const { appName, appSelector } = useArgoCDAppData({ entity });
 
-  const { loading, value, error } = !!appName ? useAppDetails({ appName }) : useListAppDetails({
-    appSelector
-  });
+  const { loading, value, error } = useAppDetails({ appName, appSelector });
   if (loading) {
     return (
       <Card>
