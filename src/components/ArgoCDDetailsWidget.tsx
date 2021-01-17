@@ -29,12 +29,15 @@ import {
 } from '@material-ui/core';
 import { Entity } from '@backstage/catalog-model';
 import moment from 'moment';
-import { ARGOCD_ANNOTATION_APP_NAME, useArgoCDAppData } from './useArgoCDAppData';
+import {
+  ARGOCD_ANNOTATION_APP_NAME,
+  useArgoCDAppData,
+} from './useArgoCDAppData';
 import { MissingAnnotationEmptyState } from '@backstage/core';
 import ErrorBoundary from './ErrorBoundary';
 import { isPluginApplicableToEntity } from '../Router';
 import { ArgoCDAppDetails, ArgoCDAppList } from '../types';
-import { useAppDetails } from "./useAppDetails";
+import { useAppDetails } from './useAppDetails';
 
 const getElapsedTime = (start: string) => {
   return moment(start).fromNow();
@@ -84,10 +87,18 @@ const OverviewComponent = ({ data }: { data: ArgoCDAppList }) => {
           <TableBody>
             {data.items.map((data: ArgoCDAppDetails) => (
               <TableRow key={data.metadata.name}>
-              <TableCell component="th" scope="row">{data.metadata.name}</TableCell>
-              <TableCell component="th" scope="row"><State value={data.status.sync.status}/></TableCell>
-              <TableCell component="th" scope="row"><State value={data.status.health.status}/></TableCell>
-              <TableCell component="th" scope="row">{getElapsedTime(data.status.operationState.finishedAt!)}</TableCell>
+                <TableCell component="th" scope="row">
+                  {data.metadata.name}
+                </TableCell>
+                <TableCell component="th" scope="row">
+                  <State value={data.status.sync.status} />
+                </TableCell>
+                <TableCell component="th" scope="row">
+                  <State value={data.status.health.status} />
+                </TableCell>
+                <TableCell component="th" scope="row">
+                  {getElapsedTime(data.status.operationState.finishedAt!)}
+                </TableCell>
               </TableRow>
             ))}
           </TableBody>
@@ -133,14 +144,12 @@ const ArgoCDDetails = ({ entity }: { entity: Entity }) => {
   }
   if (value) {
     if ((value as ArgoCDAppList).items !== undefined) {
-      return <OverviewComponent data={value as ArgoCDAppList} />
-    } else {
-      const wrapped: ArgoCDAppList = {
-        items: [value as ArgoCDAppDetails]
-      }
-      return <OverviewComponent data={wrapped} />
+      return <OverviewComponent data={value as ArgoCDAppList} />;
     }
-  } else {
-    return null
+    const wrapped: ArgoCDAppList = {
+      items: [value as ArgoCDAppDetails],
+    };
+    return <OverviewComponent data={wrapped} />;
   }
+  return null;
 };

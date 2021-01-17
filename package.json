@@ -29,6 +29,7 @@
     "@material-ui/icons": "^4.9.1",
     "@material-ui/lab": "4.0.0-alpha.45",
     "@types/node-fetch": "^2.5.7",
+    "cross-fetch": "^3.0.6",
     "date-fns": "^2.15.0",
     "history": "^5.0.0",
     "moment": "^2.27.0",
