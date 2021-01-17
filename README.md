@@ -52,18 +52,22 @@ export { plugin as ArgoCD } from '@roadiehq/backstage-plugin-argo-cd';
 
 ## How to use Argo-cd plugin in Backstage
 
-Argo-cd plugin is a part of the Backstage sample app. To start using it for your component, you have to:
+The Argo CD plugin is a part of the Backstage sample app. To start using it for your component, you have to:
 
-1. add annotation to the yaml config file of a component:
+1. Add an annotation to the YAML config file of a component. If there is only a single Argo CD application for the component, you can use
+    ```yml
+    argo-cd/app-name: <app-name>
+    ```
+    You can also use labels to select multiple Argo CD applications for a component:
+    ```yml
+    argo-cd/app-selector: <app-selector>
+    ```
+    **Note:** You can only use one of the options per component.
 
-```yml
-argo-cd/appname: <app-name>
-```
-
-1. add your auth key to the environmental variables for your backstage backend server (you can acquire it by sending a GET http request to /session endpoint with username and password):
-```
-ARGOCD_AUTH_TOKEN="argocd.token=<auth-token>"
-```
+1. Add your auth key to the environmental variables for your backstage backend server (you can acquire it by sending a GET HTTP request to Argo CD's `/session` endpoint with username and password):
+    ```
+    ARGOCD_AUTH_TOKEN="argocd.token=<auth-token>"
+    ```
 ## Develop plugin locally
 
 You can clone the plugin repo into the `plugins/` directory:

@@ -1,6 +1,6 @@
 import { createApiRef, DiscoveryApi } from "@backstage/core";
 import fetch from "cross-fetch";
-import { ArgoCDAppDetails } from "../types";
+import { ArgoCDAppDetails, ArgoCDAppList } from "../types";
 
 export const argoCDApiRef = createApiRef<ArgoCDApi>({
   id: "plugin.argocd.service",
@@ -8,6 +8,7 @@ export const argoCDApiRef = createApiRef<ArgoCDApi>({
 });
 
 export interface ArgoCDApi {
+  listApps(options: { appSelector: string }): Promise<ArgoCDAppList>
   getAppDetails(options: { appName: string }): Promise<ArgoCDAppDetails>;
 }
 const DEFAULT_PROXY_PATH = "/argocd/api";
@@ -31,6 +32,12 @@ export class ArgoCDApiClient implements ArgoCDApi {
     return `${proxyUrl}${this.proxyPath}`;
   }
 
+  async listApps(options: { appSelector: string }) {
+    let ApiUrl = await this.getApiUrl();
+    const request = await fetch(`${ApiUrl}/applications?selector=${options.appSelector}`);
+    return request.json() as Promise<ArgoCDAppList>;
+  }
+
   async getAppDetails(options: { appName: string }) {
     const ApiUrl = await this.getApiUrl();
     const request = await fetch(`${ApiUrl}/applications/${options.appName}`);
@@ -41,6 +48,46 @@ export class ArgoCDApiClient implements ArgoCDApi {
 export class ArgoCDApiMock implements ArgoCDApi {
   //@ts-ignore
   constructor(options: Options) {}
+
+  //@ts-ignore
+  async listApps(options: { appSelector: string }) {
+    return {
+      items: [
+        {
+          metadata: {
+            name: "guestbook-prod",
+          },
+          status: {
+            sync: {
+              status: "Synced",
+            },
+            health: {
+              status: "Healthy",
+            },
+            operationState: {
+              finishedAt: "2020-11-18T16:47:04Z",
+            },
+          },
+        },
+        {
+          metadata: {
+            name: "guestbook-staging",
+          },
+          status: {
+            sync: {
+              status: "OutOfSync",
+            },
+            health: {
+              status: "Healthy",
+            },
+            operationState: {
+              finishedAt: "2020-11-18T16:47:04Z",
+            },
+          },
+        }
+      ]
+    }
+  }
 
   //@ts-ignore
   async getAppDetails(options: { appName: string }) {

@@ -16,12 +16,17 @@
 
 import { Entity } from '@backstage/catalog-model';
 
-export const ARGOCD_ANNOTATION = 'argocd/app-name';
+export const ARGOCD_ANNOTATION_APP_NAME = 'argocd/app-name';
+export const ARGOCD_ANNOTATION_APP_SELECTOR = 'argocd/app-selector';
 
 export const useArgoCDAppData = ({ entity }: { entity: Entity }) => {
-  const argoCDSlug = entity?.metadata.annotations?.[ARGOCD_ANNOTATION] ?? '';
-  if (!argoCDSlug) {
-    throw new Error("'argocd' annottation is missing");
+  const appName = entity?.metadata.annotations?.[ARGOCD_ANNOTATION_APP_NAME] ?? '';
+  const appSelector = entity?.metadata.annotations?.[ARGOCD_ANNOTATION_APP_SELECTOR] ?? '';
+  if (!(appName || appSelector)) {
+    throw new Error("'argocd' annotation is missing");
+  } else if (appName && appSelector) {
+    throw new Error("Cannot provide both 'argocd/app-name' and 'argocd-app' annotations")
   }
-  return argoCDSlug;
+  return { appName, appSelector }
+
 };

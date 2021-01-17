@@ -1,3 +1,7 @@
+export type ArgoCDAppList = {
+  items: ArgoCDAppDetails[];
+}
+
 export type ArgoCDAppDetails = {
   metadata: {
     name: string;
