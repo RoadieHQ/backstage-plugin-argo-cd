@@ -17,19 +17,25 @@ import { errorApiRef, useApi } from '@backstage/core';
 import { useAsync } from 'react-use';
 import { argoCDApiRef } from '../api';
 
-export const useAppDetails = ({ appName, appSelector }: { appName?: string, appSelector?: string }) => {
+export const useAppDetails = ({
+  appName,
+  appSelector,
+}: {
+  appName?: string;
+  appSelector?: string;
+}) => {
   const api = useApi(argoCDApiRef);
   const errorApi = useApi(errorApiRef);
 
   const { loading, value, error } = useAsync(async () => {
     try {
       if (appName) {
-        return await api.getAppDetails({appName});
-      } else if (appSelector) {
-        return await api.listApps({appSelector});
-      } else {
-        return Promise.reject("Neither appName nor appSelector provided");
+        return await api.getAppDetails({ appName });
       }
+      if (appSelector) {
+        return await api.listApps({ appSelector });
+      }
+      return Promise.reject('Neither appName nor appSelector provided');
     } catch (e) {
       errorApi.post(e);
       return Promise.reject(e);
