@@ -45,9 +45,26 @@ proxy:
 export { plugin as ArgoCD } from '@roadiehq/backstage-plugin-argo-cd';
 ```
 
-4. Add plugin to the `entitytPage.tsx` source file:
+4. Add plugin to the `entityPage.tsx` source file:
 
-```tsx
+```ts
+// packages/app/src/components/catalog/EntityPage.tsx
+import {
+  ArgoCDDetailsWidget,
+  isPluginApplicableToEntity as isArgoCDAvailable
+} from '@roadiehq/backstage-plugin-argo-cd';
+
+const OverviewContent = ({ entity }: { entity: Entity }) => (
+  <Grid container spacing={3} alignItems="stretch">
+    ...
+    {isArgoCDAvailable(entity) && (
+      <Grid item md={6}>
+        <ArgoCDDetailsWidget entity={entity} />
+      </Grid>
+    )}
+    ...
+  </Grid>
+);
 ```
 
 ## How to use Argo-cd plugin in Backstage
