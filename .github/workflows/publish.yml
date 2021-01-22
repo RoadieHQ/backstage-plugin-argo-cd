@@ -8,5 +8,22 @@ jobs:
     name: npm-publish
     runs-on: ubuntu-latest
     steps:
-      - name: Use composite action backstage-plugin-publish-action
-        uses: RoadieHQ/backstage-plugin-publish-action@main
+      - name: Checkout repository
+        uses: actions/checkout@main
+      - name: Set up Node.js
+        uses: actions/setup-node@main
+        with:
+          node-version: 12.18.3
+      - run: yarn install
+      - run: yarn tsc
+      - run: yarn build
+      - name: Publish if version has been updated
+        uses: pascalgn/npm-publish-action@06e0830ea83eea10ed4a62654eeaedafb8bf50fc
+        with:
+          tag_name: 'v%s'
+          tag_message: 'v%s'
+          commit_pattern: "^Release (\\S+)"
+          workspace: '.'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NPM_AUTH_TOKEN: ${{ secrets.NPM_AUTH_TOKEN }}
