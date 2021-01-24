@@ -1913,7 +1913,40 @@
     react-use "^15.3.3"
     zen-observable "^0.8.15"
 
+<<<<<<< HEAD
 "@backstage/core-api@^0.2.7", "@backstage/core-api@^0.2.8":
+  version "0.2.9"
+  resolved "https://registry.yarnpkg.com/@backstage/core-api/-/core-api-0.2.9.tgz#c6955eeb5e26f66b5def0f93f2c148c5cad6ccdd"
+  integrity sha512-rTj51K3Q06YOvhIBzRvWVQ/C3DvAytQLELOt5c/XcLDuEdTi8Ocen/j+ufmeZg8RoIMIEGBwLGwzmOOxEK2e5Q==
+=======
+"@backstage/core-api@^0.2.5":
+  version "0.2.5"
+  resolved "https://registry.yarnpkg.com/@backstage/core-api/-/core-api-0.2.5.tgz#4866f2ac76fea7d5963af229c41d7d8205725a5b"
+  integrity sha512-0DGFywT3O+xqcirAepk4WsMVwsM1FB6uxxsNll4ix0Kdlpn/KISIZIoXD26IGW9IjP4sJUs0cugQsbHLir1/Hw==
+>>>>>>> 1ad5ffb (fix: upgrade @backstage/core from 0.3.2 to 0.4.3)
+  dependencies:
+    "@backstage/config" "^0.1.2"
+    "@backstage/theme" "^0.2.2"
+    "@material-ui/core" "^4.11.0"
+    "@material-ui/icons" "^4.9.1"
+    "@types/prop-types" "^15.7.3"
+    "@types/react" "^16.9"
+    prop-types "^15.7.2"
+    react "^16.12.0"
+    react-router-dom "6.0.0-beta.0"
+    react-use "^15.3.3"
+    zen-observable "^0.8.15"
+
+<<<<<<< HEAD
+"@backstage/core@^0.5.0":
+  version "0.5.0"
+  resolved "https://registry.yarnpkg.com/@backstage/core/-/core-0.5.0.tgz#6ff384adc595c18c7db60b9b2d23ebbb9086ed36"
+  integrity sha512-lCxgKBavUlLYZjZmRF8A7koP4NUhK/tbdf9SaEod0miZg6JTaDoAm3dmHPyqrMBHgoRRCDTxRIxNhj/8vY87oA==
+  dependencies:
+    "@backstage/config" "^0.1.2"
+    "@backstage/core-api" "^0.2.8"
+=======
+"@backstage/core-api@^0.2.8":
   version "0.2.9"
   resolved "https://registry.yarnpkg.com/@backstage/core-api/-/core-api-0.2.9.tgz#c6955eeb5e26f66b5def0f93f2c148c5cad6ccdd"
   integrity sha512-rTj51K3Q06YOvhIBzRvWVQ/C3DvAytQLELOt5c/XcLDuEdTi8Ocen/j+ufmeZg8RoIMIEGBwLGwzmOOxEK2e5Q==
@@ -1930,13 +1963,14 @@
     react-use "^15.3.3"
     zen-observable "^0.8.15"
 
-"@backstage/core@^0.5.0":
-  version "0.5.0"
-  resolved "https://registry.yarnpkg.com/@backstage/core/-/core-0.5.0.tgz#6ff384adc595c18c7db60b9b2d23ebbb9086ed36"
-  integrity sha512-lCxgKBavUlLYZjZmRF8A7koP4NUhK/tbdf9SaEod0miZg6JTaDoAm3dmHPyqrMBHgoRRCDTxRIxNhj/8vY87oA==
+"@backstage/core@^0.4.0":
+  version "0.4.0"
+  resolved "https://registry.yarnpkg.com/@backstage/core/-/core-0.4.0.tgz#a8c138a424a8ceeea571c89f6431da3d2587127a"
+  integrity sha512-YqbtrTvGJYQ3e89MomzTLtgE1VvtrhFV1xgI9JfOQqN9xzb2BGz5PpdYy1Z9wHpO9zyWEFC/EeYnZnFeq/xpJQ==
   dependencies:
     "@backstage/config" "^0.1.2"
-    "@backstage/core-api" "^0.2.8"
+    "@backstage/core-api" "^0.2.5"
+>>>>>>> 1ad5ffb (fix: upgrade @backstage/core from 0.3.2 to 0.4.3)
     "@backstage/theme" "^0.2.2"
     "@material-ui/core" "^4.11.0"
     "@material-ui/icons" "^4.9.1"
@@ -1970,6 +2004,7 @@
     remark-gfm "^1.0.0"
     zen-observable "^0.8.15"
 
+<<<<<<< HEAD
 "@backstage/core@^0.6.0":
   version "0.6.0"
   resolved "https://registry.yarnpkg.com/@backstage/core/-/core-0.6.0.tgz#28caed4d72fe19ef41dc7d11080e3f721152b4a0"
@@ -1978,6 +2013,16 @@
     "@backstage/config" "^0.1.2"
     "@backstage/core-api" "^0.2.8"
     "@backstage/theme" "^0.2.3"
+=======
+"@backstage/core@^0.4.3":
+  version "0.4.4"
+  resolved "https://registry.yarnpkg.com/@backstage/core/-/core-0.4.4.tgz#83d5ce5c8dd8a9803badc1dde389b5bde963e959"
+  integrity sha512-UEZhPBC7DAZEOCRAYQ9XcXch5JDuPn+wYNp65Ik60SSz/RFjqhq8D3P7V074cMQqWLAddVDj5dUrNeN8N1gAUQ==
+  dependencies:
+    "@backstage/config" "^0.1.2"
+    "@backstage/core-api" "^0.2.8"
+    "@backstage/theme" "^0.2.2"
+>>>>>>> 1ad5ffb (fix: upgrade @backstage/core from 0.3.2 to 0.4.3)
     "@material-ui/core" "^4.11.0"
     "@material-ui/icons" "^4.9.1"
     "@material-ui/lab" "4.0.0-alpha.45"
