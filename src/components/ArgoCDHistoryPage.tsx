@@ -18,6 +18,6 @@ import { Entity } from '@backstage/catalog-model';
 import React from 'react';
 
 // @ts-ignore
-export const ArgoCDHistoryPage = ({ entity }: { entity: Entity }) => {
+export const ArgoCDHistoryPage = ({ entity: _ }: { entity: Entity }) => {
   return <div />;
 };
