@@ -94,7 +94,7 @@ describe('argo-cd', () => {
         </ApiProvider>,
       );
       expect(
-        await rendered.findByText(/remote data decode error/),
+        await rendered.findByText(/remote data validation failed: /),
       ).toBeInTheDocument();
     });
   });

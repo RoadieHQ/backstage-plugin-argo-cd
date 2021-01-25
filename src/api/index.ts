@@ -6,6 +6,7 @@ import {
   ArgoCDAppList,
 } from '../types';
 import * as tPromise from 'io-ts-promise';
+import reporter from 'io-ts-reporters';
 
 export const argoCDApiRef = createApiRef<ArgoCDApi>({
   id: 'plugin.argocd.service',
@@ -52,11 +53,16 @@ export class ArgoCDApiClient implements ArgoCDApi {
         `failed to fetch data, status ${response.status}: ${response.statusText}`,
       );
     }
+    const json = await response.json();
     try {
       return await tPromise.decode(argoCDAppList, await response.json());
     } catch (e) {
       if (tPromise.isDecodeError(e)) {
-        throw new Error('remote data decode error');
+        throw new Error(
+          `remote data validation failed: ${reporter
+            .report(argoCDAppDetails.decode(json))
+            .join('; ')}`,
+        );
       } else {
         throw e;
       }
@@ -76,11 +82,16 @@ export class ArgoCDApiClient implements ArgoCDApi {
         `failed to fetch data, status ${response.status}: ${response.statusText}`,
       );
     }
+    const json = await response.json();
     try {
-      return await tPromise.decode(argoCDAppDetails, await response.json());
+      return await tPromise.decode(argoCDAppDetails, json);
     } catch (e) {
       if (tPromise.isDecodeError(e)) {
-        throw new Error('remote data decode error');
+        throw new Error(
+          `remote data validation failed: ${reporter
+            .report(argoCDAppDetails.decode(json))
+            .join('; ')}`,
+        );
       } else {
         throw e;
       }
