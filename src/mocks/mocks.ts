@@ -1,5 +1,4 @@
 import { ArgoCDApi } from '..';
-import { Options } from '../api';
 
 export const getEntityStub = {
   metadata: {
@@ -173,10 +172,10 @@ export const getResponseStub = {
 
 export class ArgoCDApiMock implements ArgoCDApi {
   // @ts-ignore
-  constructor(options: Options) {}
+  // constructor(_: Options) {}
 
   // @ts-ignore
-  async listApps(options: { appSelector: string }) {
+  async listApps(_: { appSelector: string }) {
     return {
       items: [
         {
@@ -216,7 +215,7 @@ export class ArgoCDApiMock implements ArgoCDApi {
   }
 
   // @ts-ignore
-  async getAppDetails(options: { appName: string }) {
+  async getAppDetails(_: { appName: string }) {
     return {
       metadata: {
         name: 'guestbook',
