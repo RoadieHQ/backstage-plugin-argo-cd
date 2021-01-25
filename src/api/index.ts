@@ -1,5 +1,11 @@
 import { createApiRef, DiscoveryApi } from '@backstage/core';
-import { ArgoCDAppDetails, ArgoCDAppList } from '../types';
+import {
+  argoCDAppDetails,
+  ArgoCDAppDetails,
+  argoCDAppList,
+  ArgoCDAppList,
+} from '../types';
+import * as tPromise from 'io-ts-promise';
 
 export const argoCDApiRef = createApiRef<ArgoCDApi>({
   id: 'plugin.argocd.service',
@@ -33,15 +39,51 @@ export class ArgoCDApiClient implements ArgoCDApi {
 
   async listApps(options: { appSelector: string }) {
     const ApiUrl = await this.getApiUrl();
-    const request = await fetch(
-      `${ApiUrl}/applications?selector=${options.appSelector}`
-    );
-    return request.json() as Promise<ArgoCDAppList>;
+    let response;
+    try {
+      response = await fetch(
+        `${ApiUrl}/applications?selector=${options.appSelector}`,
+      );
+    } catch (e) {
+      throw new Error(e);
+    }
+    if (!response.ok) {
+      throw new Error(
+        `failed to fetch data, status ${response.status}: ${response.statusText}`,
+      );
+    }
+    try {
+      return await tPromise.decode(argoCDAppList, await response.json());
+    } catch (e) {
+      if (tPromise.isDecodeError(e)) {
+        throw new Error('remote data decode error');
+      } else {
+        throw e;
+      }
+    }
   }
 
   async getAppDetails(options: { appName: string }) {
     const ApiUrl = await this.getApiUrl();
-    const request = await fetch(`${ApiUrl}/applications/${options.appName}`);
-    return request.json() as Promise<ArgoCDAppDetails>;
+    let response;
+    try {
+      response = await fetch(`${ApiUrl}/applications/${options.appName}`);
+    } catch (e) {
+      throw new Error(e);
+    }
+    if (!response.ok) {
+      throw new Error(
+        `failed to fetch data, status ${response.status}: ${response.statusText}`,
+      );
+    }
+    try {
+      return await tPromise.decode(argoCDAppDetails, await response.json());
+    } catch (e) {
+      if (tPromise.isDecodeError(e)) {
+        throw new Error('remote data decode error');
+      } else {
+        throw e;
+      }
+    }
   }
 }

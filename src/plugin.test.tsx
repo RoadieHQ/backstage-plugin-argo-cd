@@ -27,7 +27,11 @@ import { setupServer } from 'msw/node';
 import { ArgoCDApiClient, argoCDApiRef } from './api';
 import { plugin } from './plugin';
 import { ArgoCDDetailsWidget } from './components/ArgoCDDetailsWidget';
-import { getEntityStub, getResponseStub } from './mocks/mocks';
+import {
+  getEntityStub,
+  getResponseStub,
+  getResponseStubMissingData,
+} from './mocks/mocks';
 
 const discoveryApi = UrlPatternDiscovery.compile('http://exampleapi.com');
 const errorApiMock = { post: jest.fn(), error$: jest.fn() };
@@ -54,20 +58,44 @@ describe('argo-cd', () => {
   });
 
   describe('widget', () => {
-    beforeEach(() => {
+    it('should display fetched data', async () => {
       worker.use(
-        rest.get('*', (_, res, ctx) => res(ctx.json(getResponseStub)))
+        rest.get('*', (_, res, ctx) => res(ctx.json(getResponseStub))),
       );
-    });
-    it('should display widget', async () => {
       const rendered = render(
         <ApiProvider apis={apis}>
           <ArgoCDDetailsWidget entity={getEntityStub} />
-        </ApiProvider>
+        </ApiProvider>,
       );
       expect(await rendered.findByText('guestbook')).toBeInTheDocument();
       expect(await rendered.findByText('Synced')).toBeInTheDocument();
       expect(await rendered.findByText('Healthy')).toBeInTheDocument();
+    });
+
+    it('should display properly failure status codes', async () => {
+      worker.use(rest.get('*', (_, res, ctx) => res(ctx.status(403))));
+      const rendered = render(
+        <ApiProvider apis={apis}>
+          <ArgoCDDetailsWidget entity={getEntityStub} />
+        </ApiProvider>,
+      );
+      expect(await rendered.findByText(/403/)).toBeInTheDocument();
+    });
+
+    it('should display data validation errors', async () => {
+      worker.use(
+        rest.get('*', (_, res, ctx) =>
+          res(ctx.json(getResponseStubMissingData)),
+        ),
+      );
+      const rendered = render(
+        <ApiProvider apis={apis}>
+          <ArgoCDDetailsWidget entity={getEntityStub} />
+        </ApiProvider>,
+      );
+      expect(
+        await rendered.findByText(/remote data decode error/),
+      ).toBeInTheDocument();
     });
   });
 });
