@@ -5,6 +5,7 @@ import {
   argoCDAppList,
   ArgoCDAppList,
 } from '../types';
+import * as t from 'io-ts';
 import * as tPromise from 'io-ts-promise';
 import reporter from 'io-ts-reporters';
 
@@ -38,16 +39,8 @@ export class ArgoCDApiClient implements ArgoCDApi {
     return `${proxyUrl}${this.proxyPath}`;
   }
 
-  async listApps(options: { appSelector: string }) {
-    const ApiUrl = await this.getApiUrl();
-    let response;
-    try {
-      response = await fetch(
-        `${ApiUrl}/applications?selector=${options.appSelector}`,
-      );
-    } catch (e) {
-      throw new Error(e);
-    }
+  private async fetchDecode<A, O, I>(url: string, typeCodec: t.Type<A, O, I>) {
+    const response = await fetch(url);
     if (!response.ok) {
       throw new Error(
         `failed to fetch data, status ${response.status}: ${response.statusText}`,
@@ -55,12 +48,12 @@ export class ArgoCDApiClient implements ArgoCDApi {
     }
     const json = await response.json();
     try {
-      return await tPromise.decode(argoCDAppList, await response.json());
+      return await tPromise.decode(typeCodec, json);
     } catch (e) {
       if (tPromise.isDecodeError(e)) {
         throw new Error(
           `remote data validation failed: ${reporter
-            .report(argoCDAppDetails.decode(json))
+            .report(typeCodec.decode(json))
             .join('; ')}`,
         );
       } else {
@@ -69,32 +62,19 @@ export class ArgoCDApiClient implements ArgoCDApi {
     }
   }
 
+  async listApps(options: { appSelector: string }) {
+    const ApiUrl = await this.getApiUrl();
+    return this.fetchDecode(
+      `${ApiUrl}/applications?selector=${options.appSelector}`,
+      argoCDAppList,
+    );
+  }
+
   async getAppDetails(options: { appName: string }) {
     const ApiUrl = await this.getApiUrl();
-    let response;
-    try {
-      response = await fetch(`${ApiUrl}/applications/${options.appName}`);
-    } catch (e) {
-      throw new Error(e);
-    }
-    if (!response.ok) {
-      throw new Error(
-        `failed to fetch data, status ${response.status}: ${response.statusText}`,
-      );
-    }
-    const json = await response.json();
-    try {
-      return await tPromise.decode(argoCDAppDetails, json);
-    } catch (e) {
-      if (tPromise.isDecodeError(e)) {
-        throw new Error(
-          `remote data validation failed: ${reporter
-            .report(argoCDAppDetails.decode(json))
-            .join('; ')}`,
-        );
-      } else {
-        throw e;
-      }
-    }
+    return this.fetchDecode(
+      `${ApiUrl}/applications/${options.appName}`,
+      argoCDAppDetails,
+    );
   }
 }
