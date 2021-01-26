@@ -34,6 +34,18 @@ export const getEntityStub = {
   ],
 };
 
+export const getResponseStubMissingData = {
+  metadata: {
+    name: 'guestbook',
+  },
+  status: {
+    sync: {
+      status: 'Synced',
+      health: {},
+    },
+  },
+};
+
 export const getResponseStub = {
   metadata: {
     name: 'guestbook',
