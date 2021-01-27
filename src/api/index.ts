@@ -64,13 +64,13 @@ export class ArgoCDApiClient implements ArgoCDApi {
 
   async listApps(options: { appSelector?: string, projectName?: string }) {
     const ApiUrl = await this.getApiUrl();
-    const params = {
+    const params : {[key: string]: string | undefined} = {
       selector: options.appSelector,
       project: options.projectName
     }
     const query = Object.keys(params)
-        .filter((key) => params[key])
-        .map(k => `${encodeURIComponent(k)}=${encodeURIComponent(params[k])}`)
+        .filter((key) => params[key] !== undefined)
+        .map(k => `${encodeURIComponent(k)}=${encodeURIComponent(params[k] as string)}`)
         .join('&');
     return this.fetchDecode(
       `${ApiUrl}/applications?${query}`,
