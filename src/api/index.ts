@@ -15,7 +15,7 @@ export const argoCDApiRef = createApiRef<ArgoCDApi>({
 });
 
 export interface ArgoCDApi {
-  listApps(options: { appSelector: string }): Promise<ArgoCDAppList>;
+  listApps(options: { appSelector?: string, projectName?: string }): Promise<ArgoCDAppList>;
   getAppDetails(options: { appName: string }): Promise<ArgoCDAppDetails>;
 }
 const DEFAULT_PROXY_PATH = '/argocd/api';
@@ -62,10 +62,18 @@ export class ArgoCDApiClient implements ArgoCDApi {
     }
   }
 
-  async listApps(options: { appSelector: string }) {
+  async listApps(options: { appSelector?: string, projectName?: string }) {
     const ApiUrl = await this.getApiUrl();
+    const params = {
+      selector: options.appSelector,
+      project: options.projectName
+    }
+    const query = Object.keys(params)
+        .filter((key) => params[key])
+        .map(k => `${encodeURIComponent(k)}=${encodeURIComponent(params[k])}`)
+        .join('&');
     return this.fetchDecode(
-      `${ApiUrl}/applications?selector=${options.appSelector}`,
+      `${ApiUrl}/applications?${query}`,
       argoCDAppList,
     );
   }
