@@ -20,9 +20,11 @@ import { argoCDApiRef } from '../api';
 export const useAppDetails = ({
   appName,
   appSelector,
+  projectName
 }: {
   appName?: string;
   appSelector?: string;
+  projectName?: string
 }) => {
   const api = useApi(argoCDApiRef);
   const errorApi = useApi(errorApiRef);
@@ -32,8 +34,8 @@ export const useAppDetails = ({
       if (appName) {
         return await api.getAppDetails({ appName });
       }
-      if (appSelector) {
-        return await api.listApps({ appSelector });
+      if (appSelector || projectName) {
+        return await api.listApps({ appSelector, projectName });
       }
       return Promise.reject('Neither appName nor appSelector provided');
     } catch (e) {
