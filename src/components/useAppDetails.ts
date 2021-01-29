@@ -20,11 +20,13 @@ import { argoCDApiRef } from '../api';
 export const useAppDetails = ({
   appName,
   appSelector,
-  projectName
+  projectName,
+  url,
 }: {
   appName?: string;
   appSelector?: string;
-  projectName?: string
+  projectName?: string;
+  url: string;
 }) => {
   const api = useApi(argoCDApiRef);
   const errorApi = useApi(errorApiRef);
@@ -32,10 +34,10 @@ export const useAppDetails = ({
   const { loading, value, error } = useAsync(async () => {
     try {
       if (appName) {
-        return await api.getAppDetails({ appName });
+        return await api.getAppDetails({ url, appName });
       }
       if (appSelector || projectName) {
-        return await api.listApps({ appSelector, projectName });
+        return await api.listApps({ url, appSelector, projectName });
       }
       return Promise.reject('Neither appName nor appSelector provided');
     } catch (e) {

@@ -187,7 +187,7 @@ export class ArgoCDApiMock implements ArgoCDApi {
   // constructor(_: Options) {}
 
   // @ts-ignore
-  async listApps(_: { appSelector: string }) {
+  async listApps(_: { url: string; appSelector: string }) {
     return {
       items: [
         {

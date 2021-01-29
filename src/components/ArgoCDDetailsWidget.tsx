@@ -119,9 +119,15 @@ export const ArgoCDDetailsWidget = ({ entity }: { entity: Entity }) => {
 };
 
 const ArgoCDDetails = ({ entity }: { entity: Entity }) => {
-  const { appName, appSelector } = useArgoCDAppData({ entity });
-
-  const { loading, value, error } = useAppDetails({ appName, appSelector });
+  const { url, appName, appSelector, projectName } = useArgoCDAppData({
+    entity,
+  });
+  const { loading, value, error } = useAppDetails({
+    url,
+    appName,
+    appSelector,
+    projectName,
+  });
   if (loading) {
     return (
       <Card>
