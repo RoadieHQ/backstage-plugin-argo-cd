@@ -22,7 +22,6 @@ yarn add @roadiehq/backstage-plugin-argo-cd
 
 ```yml
 proxy:
-
   ...
 
   '/argocd/api':
@@ -34,8 +33,6 @@ proxy:
     headers:
       Cookie:
         $env: ARGOCD_AUTH_TOKEN
-
-
 ```
 
 3. Add plugin to the list of plugins:
@@ -85,6 +82,38 @@ The Argo CD plugin is a part of the Backstage sample app. To start using it for 
     ```
     ARGOCD_AUTH_TOKEN="argocd.token=<auth-token>"
     ```
+## Support for multiple ArgoCD instances
+
+If you want to create multiple components that fetch data from different argoCD instances, you have to add a proxy config for each instance:
+
+```yml
+proxy:
+  ...
+
+  '/argocd/api':
+    target: https://<someAddress>/api/v1/
+    changeOrigin: true
+    secure: false
+    headers:
+      Cookie:
+        $env: ARGOCD_AUTH_TOKEN
+
+  '/argocd/api2':
+    target: https://<otherAddress>/api/v1/
+    changeOrigin: true
+    secure: false
+    headers:
+      Cookie:
+        $env: ARGOCD_AUTH_TOKEN2
+```
+Add all required auth tokens to environmental variables, in this example, `ARGOCD_AUTH_TOKEN2`.
+
+And then in the following component definition annotations add a line with the url to the desired proxy path:
+```yml
+argo-cd/proxy-url: '/argocd/api2'
+```
+`argo-cd/proxy-url` annotation defaults to '/argocd/api' so it's not needed if there is only one proxy config.
+
 ## Develop plugin locally
 
 You can clone the plugin repo into the `plugins/` directory:

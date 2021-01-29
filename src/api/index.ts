@@ -15,10 +15,16 @@ export const argoCDApiRef = createApiRef<ArgoCDApi>({
 });
 
 export interface ArgoCDApi {
-  listApps(options: { appSelector?: string, projectName?: string }): Promise<ArgoCDAppList>;
-  getAppDetails(options: { appName: string }): Promise<ArgoCDAppDetails>;
+  listApps(options: {
+    url: string;
+    appSelector?: string;
+    projectName?: string;
+  }): Promise<ArgoCDAppList>;
+  getAppDetails(options: {
+    url: string;
+    appName: string;
+  }): Promise<ArgoCDAppDetails>;
 }
-const DEFAULT_PROXY_PATH = '/argocd/api';
 
 export type Options = {
   discoveryApi: DiscoveryApi;
@@ -27,16 +33,13 @@ export type Options = {
 
 export class ArgoCDApiClient implements ArgoCDApi {
   private readonly discoveryApi: DiscoveryApi;
-  private readonly proxyPath: string;
 
   constructor(options: Options) {
     this.discoveryApi = options.discoveryApi;
-    this.proxyPath = options.proxyPath ?? DEFAULT_PROXY_PATH;
   }
 
-  private async getApiUrl() {
-    const proxyUrl = await this.discoveryApi.getBaseUrl('proxy');
-    return `${proxyUrl}${this.proxyPath}`;
+  private async getProxyUrl() {
+    return await this.discoveryApi.getBaseUrl('proxy');
   }
 
   private async fetchDecode<A, O, I>(url: string, typeCodec: t.Type<A, O, I>) {
@@ -62,26 +65,33 @@ export class ArgoCDApiClient implements ArgoCDApi {
     }
   }
 
-  async listApps(options: { appSelector?: string, projectName?: string }) {
-    const ApiUrl = await this.getApiUrl();
-    const params : {[key: string]: string | undefined} = {
+  async listApps(options: {
+    url: string;
+    appSelector?: string;
+    projectName?: string;
+  }) {
+    const proxyUrl = await this.getProxyUrl();
+    const params: { [key: string]: string | undefined } = {
       selector: options.appSelector,
-      project: options.projectName
-    }
+      project: options.projectName,
+    };
     const query = Object.keys(params)
-        .filter((key) => params[key] !== undefined)
-        .map(k => `${encodeURIComponent(k)}=${encodeURIComponent(params[k] as string)}`)
-        .join('&');
+      .filter(key => params[key] !== undefined)
+      .map(
+        k =>
+          `${encodeURIComponent(k)}=${encodeURIComponent(params[k] as string)}`,
+      )
+      .join('&');
     return this.fetchDecode(
-      `${ApiUrl}/applications?${query}`,
+      `${proxyUrl}${options.url}/applications?${query}`,
       argoCDAppList,
     );
   }
 
-  async getAppDetails(options: { appName: string }) {
-    const ApiUrl = await this.getApiUrl();
+  async getAppDetails(options: { url: string; appName: string }) {
+    const proxyUrl = await this.getProxyUrl();
     return this.fetchDecode(
-      `${ApiUrl}/applications/${options.appName}`,
+      `${proxyUrl}${options.url}/applications/${options.appName}`,
       argoCDAppDetails,
     );
   }
