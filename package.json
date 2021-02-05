@@ -21,8 +21,8 @@
     "clean": "backstage-cli clean"
   },
   "dependencies": {
-    "@backstage/catalog-model": "^0.4.0",
-    "@backstage/core": "^0.3.0",
+    "@backstage/catalog-model": "^0.7.0",
+    "@backstage/core": "^0.6.0",
     "@material-ui/core": "^4.9.1",
     "@material-ui/lab": "4.0.0-alpha.45",
     "cross-fetch": "^3.0.6",
@@ -39,15 +39,15 @@
     "react-use": "^15.3.3"
   },
   "devDependencies": {
-    "@backstage/cli": "^0.4.0",
-    "@backstage/dev-utils": "^0.1.3",
-    "@backstage/test-utils": "^0.1.2",
+    "@backstage/cli": "^0.6.0",
+    "@backstage/dev-utils": "^0.1.9",
+    "@backstage/test-utils": "^0.1.6",
     "@rollup/plugin-commonjs": "^14.0.0",
     "@rollup/plugin-node-resolve": "^8.4.0",
     "@testing-library/jest-dom": "^5.10.1",
     "@testing-library/react": "^10.4.1",
-    "@typescript-eslint/eslint-plugin": "^3.8.0",
-    "@typescript-eslint/parser": "^3.8.0",
+    "@typescript-eslint/eslint-plugin": "^v4.14.0",
+    "@typescript-eslint/parser": "^v4.14.0",
     "esbuild": "^0.6.18",
     "eslint": "^7.6.0",
     "eslint-plugin-react": "^7.20.5",

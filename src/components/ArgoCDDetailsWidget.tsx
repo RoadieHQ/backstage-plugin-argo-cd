@@ -15,17 +15,8 @@
  */
 import React from 'react';
 import {
-  Typography,
   Box,
-  Card,
-  CardHeader,
-  CardContent,
   LinearProgress,
-  Table,
-  TableRow,
-  TableHead,
-  TableCell,
-  TableBody,
 } from '@material-ui/core';
 import { Entity } from '@backstage/catalog-model';
 import moment from 'moment';
@@ -33,7 +24,12 @@ import {
   ARGOCD_ANNOTATION_APP_NAME,
   useArgoCDAppData,
 } from './useArgoCDAppData';
-import { MissingAnnotationEmptyState } from '@backstage/core';
+import {
+  InfoCard,
+  MissingAnnotationEmptyState,
+  Table,
+  TableColumn,
+} from '@backstage/core';
 import ErrorBoundary from './ErrorBoundary';
 import { isPluginApplicableToEntity } from '../Router';
 import { ArgoCDAppDetails, ArgoCDAppList } from '../types';
@@ -69,52 +65,39 @@ const State = ({ value }: { value: string }) => {
 };
 
 const OverviewComponent = ({ data }: { data: ArgoCDAppList }) => {
-  return (
-    <Card>
-      <CardHeader
-        title={<Typography variant="h5">ArgoCD overview</Typography>}
-      />
-      <CardContent>
-        <Table size="small">
-          <TableHead>
-            <TableRow>
-              <TableCell>Name</TableCell>
-              <TableCell>Sync Status</TableCell>
-              <TableCell>Health Status</TableCell>
-              <TableCell>Last Synced</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {data.items.map((data: ArgoCDAppDetails) => (
-              <TableRow key={data.metadata.name}>
-                <TableCell component="th" scope="row">
-                  {data.metadata.name}
-                </TableCell>
-                <TableCell component="th" scope="row">
-                  <State value={data.status.sync.status} />
-                </TableCell>
-                <TableCell component="th" scope="row">
-                  <State value={data.status.health.status} />
-                </TableCell>
-                <TableCell component="th" scope="row">
-                  {getElapsedTime(data.status.operationState.finishedAt!)}
-                </TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </CardContent>
-    </Card>
-  );
-};
+  const columns: TableColumn[] = [
+    {
+      title: 'Name',
+      highlight: true,
+      field: 'metadata.name',
+    },
+    {
+      title: 'Sync Status',
+      render: (row: any): React.ReactNode => (
+        <State value={row.status.sync.status} />
+      ),
+    },
+    {
+      title: 'Health Status',
+      render: (row: any): React.ReactNode => (
+        <State value={row.status.health.status} />
+      ),
+    },
+    {
+      title: 'Last Synced',
+      render: (row: any): React.ReactNode => (
+        getElapsedTime(row.status.operationState.finishedAt!)
+      ),
+    },
+  ];
 
-export const ArgoCDDetailsWidget = ({ entity }: { entity: Entity }) => {
-  return !isPluginApplicableToEntity(entity) ? (
-    <MissingAnnotationEmptyState annotation={ARGOCD_ANNOTATION_APP_NAME} />
-  ) : (
-    <ErrorBoundary>
-      <ArgoCDDetails entity={entity} />
-    </ErrorBoundary>
+  return (
+    <Table
+      title="ArgoCD overview"
+      options={{ paging: false, search: false, sorting: false, draggable: false, padding: 'dense' }}
+      data={data.items}
+      columns={columns}
+    />
   );
 };
 
@@ -130,22 +113,16 @@ const ArgoCDDetails = ({ entity }: { entity: Entity }) => {
   });
   if (loading) {
     return (
-      <Card>
-        <CardHeader
-          title={<Typography variant="h5">ArgoCD overview</Typography>}
-        />
+      <InfoCard title="ArgoCD overview">
         <LinearProgress />
-      </Card>
+      </InfoCard>
     );
   }
   if (error) {
     return (
-      <Card>
-        <CardHeader
-          title={<Typography variant="h5">ArgoCD overview</Typography>}
-        />
+      <InfoCard title="ArgoCD overview">
         Error occurred while fetching data. {error.name}: {error.message}
-      </Card>
+      </InfoCard>
     );
   }
   if (value) {
@@ -158,4 +135,14 @@ const ArgoCDDetails = ({ entity }: { entity: Entity }) => {
     return <OverviewComponent data={wrapped} />;
   }
   return null;
+};
+
+export const ArgoCDDetailsWidget = ({ entity }: { entity: Entity }) => {
+  return !isPluginApplicableToEntity(entity) ? (
+    <MissingAnnotationEmptyState annotation={ARGOCD_ANNOTATION_APP_NAME} />
+  ) : (
+    <ErrorBoundary>
+      <ArgoCDDetails entity={entity} />
+    </ErrorBoundary>
+  );
 };
