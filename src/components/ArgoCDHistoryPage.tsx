@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-import { Entity } from '@backstage/catalog-model';
 import React from 'react';
+import { Entity } from '@backstage/catalog-model';
 
 // @ts-ignore
 export const ArgoCDHistoryPage = ({ entity: _ }: { entity: Entity }) => {

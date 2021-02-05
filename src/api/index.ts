@@ -5,14 +5,9 @@ import {
   argoCDAppList,
   ArgoCDAppList,
 } from '../types';
-import * as t from 'io-ts';
-import * as tPromise from 'io-ts-promise';
+import { Type as tsType } from 'io-ts';
+import { decode as tsDecode, isDecodeError as tsIsDecodeError } from 'io-ts-promise';
 import reporter from 'io-ts-reporters';
-
-export const argoCDApiRef = createApiRef<ArgoCDApi>({
-  id: 'plugin.argocd.service',
-  description: 'Used by the ArgoCD plugin to make requests',
-});
 
 export interface ArgoCDApi {
   listApps(options: {
@@ -25,6 +20,11 @@ export interface ArgoCDApi {
     appName: string;
   }): Promise<ArgoCDAppDetails>;
 }
+
+export const argoCDApiRef = createApiRef<ArgoCDApi>({
+  id: 'plugin.argocd.service',
+  description: 'Used by the ArgoCD plugin to make requests',
+});
 
 export type Options = {
   discoveryApi: DiscoveryApi;
@@ -42,7 +42,7 @@ export class ArgoCDApiClient implements ArgoCDApi {
     return await this.discoveryApi.getBaseUrl('proxy');
   }
 
-  private async fetchDecode<A, O, I>(url: string, typeCodec: t.Type<A, O, I>) {
+  private async fetchDecode<A, O, I>(url: string, typeCodec: tsType<A, O, I>) {
     const response = await fetch(url);
     if (!response.ok) {
       throw new Error(
@@ -51,9 +51,9 @@ export class ArgoCDApiClient implements ArgoCDApi {
     }
     const json = await response.json();
     try {
-      return await tPromise.decode(typeCodec, json);
+      return await tsDecode(typeCodec, json);
     } catch (e) {
-      if (tPromise.isDecodeError(e)) {
+      if (tsIsDecodeError(e)) {
         throw new Error(
           `remote data validation failed: ${reporter
             .report(typeCodec.decode(json))
