@@ -14,10 +14,7 @@
  * limitations under the License.
  */
 import React from 'react';
-import {
-  Box,
-  LinearProgress,
-} from '@material-ui/core';
+import { Box, LinearProgress } from '@material-ui/core';
 import { Entity } from '@backstage/catalog-model';
 import moment from 'moment';
 import {
@@ -31,7 +28,7 @@ import {
   TableColumn,
 } from '@backstage/core';
 import ErrorBoundary from './ErrorBoundary';
-import { isPluginApplicableToEntity } from '../Router';
+import { isArgocdAvailable } from '../Router';
 import { ArgoCDAppDetails, ArgoCDAppList } from '../types';
 import { useAppDetails } from './useAppDetails';
 
@@ -85,16 +82,21 @@ const OverviewComponent = ({ data }: { data: ArgoCDAppList }) => {
     },
     {
       title: 'Last Synced',
-      render: (row: any): React.ReactNode => (
-        getElapsedTime(row.status.operationState.finishedAt!)
-      ),
+      render: (row: any): React.ReactNode =>
+        getElapsedTime(row.status.operationState.finishedAt!),
     },
   ];
 
   return (
     <Table
       title="ArgoCD overview"
-      options={{ paging: false, search: false, sorting: false, draggable: false, padding: 'dense' }}
+      options={{
+        paging: false,
+        search: false,
+        sorting: false,
+        draggable: false,
+        padding: 'dense',
+      }}
       data={data.items}
       columns={columns}
     />
@@ -137,8 +139,11 @@ const ArgoCDDetails = ({ entity }: { entity: Entity }) => {
   return null;
 };
 
+/**
+ * @deprecated since v0.3.0 you should use new composability API
+ */
 export const ArgoCDDetailsWidget = ({ entity }: { entity: Entity }) => {
-  return !isPluginApplicableToEntity(entity) ? (
+  return !isArgocdAvailable(entity) ? (
     <MissingAnnotationEmptyState annotation={ARGOCD_ANNOTATION_APP_NAME} />
   ) : (
     <ErrorBoundary>
