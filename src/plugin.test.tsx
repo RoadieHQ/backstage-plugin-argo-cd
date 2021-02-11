@@ -25,7 +25,7 @@ import { render } from '@testing-library/react';
 import { rest } from 'msw';
 import { setupServer } from 'msw/node';
 import { ArgoCDApiClient, argoCDApiRef } from './api';
-import { plugin } from './plugin';
+import { argocdPlugin } from './plugin';
 import { ArgoCDDetailsWidget } from './components/ArgoCDDetailsWidget';
 import {
   getEntityStub,
@@ -53,19 +53,19 @@ describe('argo-cd', () => {
 
   describe('export-plugin', () => {
     it('should export plugin', () => {
-      expect(plugin).toBeDefined();
+      expect(argocdPlugin).toBeDefined();
     });
   });
 
   describe('widget', () => {
     it('should display fetched data', async () => {
       worker.use(
-        rest.get('*', (_, res, ctx) => res(ctx.json(getResponseStub))),
+        rest.get('*', (_, res, ctx) => res(ctx.json(getResponseStub)))
       );
       const rendered = render(
         <ApiProvider apis={apis}>
           <ArgoCDDetailsWidget entity={getEntityStub} />
-        </ApiProvider>,
+        </ApiProvider>
       );
       expect(await rendered.findByText('guestbook')).toBeInTheDocument();
       expect(await rendered.findByText('Synced')).toBeInTheDocument();
@@ -77,7 +77,7 @@ describe('argo-cd', () => {
       const rendered = render(
         <ApiProvider apis={apis}>
           <ArgoCDDetailsWidget entity={getEntityStub} />
-        </ApiProvider>,
+        </ApiProvider>
       );
       expect(await rendered.findByText(/403/)).toBeInTheDocument();
     });
@@ -85,16 +85,16 @@ describe('argo-cd', () => {
     it('should display data validation errors', async () => {
       worker.use(
         rest.get('*', (_, res, ctx) =>
-          res(ctx.json(getResponseStubMissingData)),
-        ),
+          res(ctx.json(getResponseStubMissingData))
+        )
       );
       const rendered = render(
         <ApiProvider apis={apis}>
           <ArgoCDDetailsWidget entity={getEntityStub} />
-        </ApiProvider>,
+        </ApiProvider>
       );
       expect(
-        await rendered.findByText(/remote data validation failed: /),
+        await rendered.findByText(/remote data validation failed: /)
       ).toBeInTheDocument();
     });
   });

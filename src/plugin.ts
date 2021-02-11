@@ -1,11 +1,18 @@
 import {
   createApiFactory,
+  createComponentExtension,
   createPlugin,
+  createRoutableExtension,
+  createRouteRef,
   discoveryApiRef,
 } from '@backstage/core';
 import { ArgoCDApiClient, argoCDApiRef } from './api';
 
-export const plugin = createPlugin({
+export const entityContentRouteRef = createRouteRef({
+  title: 'ArgoCD Entity Content',
+});
+
+export const argocdPlugin = createPlugin({
   id: 'argocd',
   apis: [
     createApiFactory({
@@ -14,4 +21,25 @@ export const plugin = createPlugin({
       factory: ({ discoveryApi }) => new ArgoCDApiClient({ discoveryApi }),
     }),
   ],
+  routes: {
+    entityContent: entityContentRouteRef,
+  },
 });
+
+export const EntityArgoCDContent = argocdPlugin.provide(
+  createRoutableExtension({
+    component: () => import('./Router').then((m) => m.Router),
+    mountPoint: entityContentRouteRef,
+  })
+);
+
+export const EntityArgoCDOverviewCard = argocdPlugin.provide(
+  createComponentExtension({
+    component: {
+      lazy: () =>
+        import('./components/ArgoCDDetailsWidget').then(
+          (m) => m.ArgoCDDetailsWidget
+        ),
+    },
+  })
+);

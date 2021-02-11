@@ -24,14 +24,16 @@ import {
 } from './components/useArgoCDAppData';
 import { MissingAnnotationEmptyState } from '@backstage/core';
 
-type Props = { entity: Entity };
-
-export const isPluginApplicableToEntity = (entity: Entity) =>
+export const isArgocdAvailable = (entity: Entity) =>
   Boolean(entity?.metadata.annotations?.[ARGOCD_ANNOTATION_APP_NAME]) ||
   Boolean(entity?.metadata.annotations?.[ARGOCD_ANNOTATION_APP_SELECTOR]) ||
   Boolean(entity?.metadata.annotations?.[ARGOCD_ANNOTATION_PROJECT_NAME]);
-export const Router: React.FC<Props> = ({ entity }) =>
-  !isPluginApplicableToEntity(entity) ? (
+
+/**
+ * @deprecated since v0.3.0 you should use new composability API
+ */
+export const Router = ({ entity }: { entity: Entity }) =>
+  !isArgocdAvailable(entity) ? (
     <MissingAnnotationEmptyState annotation={ARGOCD_ANNOTATION_APP_NAME} />
   ) : (
     <Routes>
