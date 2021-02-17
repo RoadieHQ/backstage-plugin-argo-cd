@@ -1,6 +1,6 @@
 {
   "name": "@roadiehq/backstage-plugin-argo-cd",
-  "version": "0.3.2",
+  "version": "0.3.3",
   "main": "src/index.ts",
   "types": "src/index.ts",
   "license": "Apache-2.0",
@@ -17,7 +17,6 @@
   },
   "scripts": {
     "build": "backstage-cli plugin:build",
-    "build-rollup": "rollup -c",
     "start": "backstage-cli plugin:serve",
     "lint": "backstage-cli lint",
     "test": "backstage-cli test",
@@ -51,8 +50,6 @@
     "@backstage/cli": "^0.6.0",
     "@backstage/dev-utils": "^0.1.9",
     "@backstage/test-utils": "^0.1.6",
-    "@rollup/plugin-commonjs": "^14.0.0",
-    "@rollup/plugin-node-resolve": "^8.4.0",
     "@testing-library/jest-dom": "^5.10.1",
     "@testing-library/react": "^10.4.1",
     "@typescript-eslint/eslint-plugin": "^v4.14.0",
@@ -60,11 +57,7 @@
     "esbuild": "^0.6.18",
     "eslint": "^7.6.0",
     "eslint-plugin-react": "^7.20.5",
-    "msw": "^0.19.5",
-    "rollup": "^2.33.1",
-    "rollup-plugin-dts": "^1.4.13",
-    "rollup-plugin-esbuild": "^2.4.2",
-    "rollup-plugin-peer-deps-external": "^2.2.3"
+    "msw": "^0.19.5"
   },
   "files": [
     "dist"
