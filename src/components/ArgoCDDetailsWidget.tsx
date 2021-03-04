@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 import React from 'react';
-import { Box, LinearProgress } from '@material-ui/core';
+import { Box, LinearProgress, Link } from '@material-ui/core';
 import { Entity } from '@backstage/catalog-model';
 import moment from 'moment';
 import {
@@ -22,10 +22,12 @@ import {
   useArgoCDAppData,
 } from './useArgoCDAppData';
 import {
+  configApiRef,
   InfoCard,
   MissingAnnotationEmptyState,
   Table,
   TableColumn,
+  useApi,
 } from '@backstage/core';
 import ErrorBoundary from './ErrorBoundary';
 import { isArgocdAvailable } from '../Router';
@@ -62,11 +64,16 @@ const State = ({ value }: { value: string }) => {
 };
 
 const OverviewComponent = ({ data }: { data: ArgoCDAppList }) => {
+  const configApi = useApi(configApiRef);
+  const baseUrl = configApi.getOptionalString('argocd.baseUrl')
+
   const columns: TableColumn[] = [
     {
       title: 'Name',
       highlight: true,
-      field: 'metadata.name',
+      render: (row: any): React.ReactNode => (
+        baseUrl ? <Link href={`${baseUrl}/applications/${row.metadata.name}`} target="_blank" rel="noopener">{row.metadata.name}</Link> : row.metadata.name
+      ),
     },
     {
       title: 'Sync Status',

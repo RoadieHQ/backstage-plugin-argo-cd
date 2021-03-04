@@ -18,7 +18,7 @@ If you have your own backstage application without this plugin, here it's how to
 yarn add @roadiehq/backstage-plugin-argo-cd
 ```
 
-2. add argo-cd to the proxy object in `app-config.yaml` file in the root directory:
+2. In the `app-config.yaml` file in the root directory, add argo-cd to the proxy object and optionally add the base url for your argoCD web UI:
 
 ```yml
 proxy:
@@ -33,6 +33,11 @@ proxy:
     headers:
       Cookie:
         $env: ARGOCD_AUTH_TOKEN
+
+
+# optional: this will link to your argoCD web UI for each argoCD application
+argocd:
+  baseUrl: https://my-argocd-web-ui.com
 ```
 
 3. Add plugin to the list of plugins:

@@ -20,6 +20,8 @@ import {
   ApiRegistry,
   errorApiRef,
   UrlPatternDiscovery,
+  configApiRef,
+  ConfigReader,
 } from '@backstage/core';
 import { render } from '@testing-library/react';
 import { rest } from 'msw';
@@ -37,6 +39,7 @@ const discoveryApi = UrlPatternDiscovery.compile('http://exampleapi.com');
 const errorApiMock = { post: jest.fn(), error$: jest.fn() };
 
 const apis = ApiRegistry.from([
+  [configApiRef, new ConfigReader({})],
   [errorApiRef, errorApiMock],
   [argoCDApiRef, new ArgoCDApiClient({ discoveryApi })],
 ]);
@@ -68,8 +71,27 @@ describe('argo-cd', () => {
         </ApiProvider>
       );
       expect(await rendered.findByText('guestbook')).toBeInTheDocument();
+      expect(await rendered.findByText('guestbook')).not.toHaveAttribute("href");
       expect(await rendered.findByText('Synced')).toBeInTheDocument();
       expect(await rendered.findByText('Healthy')).toBeInTheDocument();
+    });
+
+    it('should display link to argo cd source', async () => {
+      const apisWithArgoCDBaseURL = apis.with(
+        configApiRef,
+        new ConfigReader({ argocd: { baseUrl: "www.example-argocd-url.com" } })
+      );
+
+      worker.use(
+        rest.get('*', (_, res, ctx) => res(ctx.json(getResponseStub)))
+      );
+
+      const rendered = render(
+        <ApiProvider apis={apisWithArgoCDBaseURL}>
+          <ArgoCDDetailsWidget entity={getEntityStub} />
+        </ApiProvider>
+      );
+      expect(await rendered.findByText('guestbook')).toHaveAttribute('href', 'www.example-argocd-url.com/applications/guestbook');
     });
 
     it('should display properly failure status codes', async () => {
