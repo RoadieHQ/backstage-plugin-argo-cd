@@ -63,7 +63,7 @@ const State = ({ value }: { value: string }) => {
   );
 };
 
-const OverviewComponent = ({ data }: { data: ArgoCDAppList }) => {
+const OverviewComponent = ({ data, extraColumns }: { data: ArgoCDAppList, extraColumns: TableColumn[] }) => {
   const configApi = useApi(configApiRef);
   const baseUrl = configApi.getOptionalString('argocd.baseUrl')
 
@@ -105,12 +105,12 @@ const OverviewComponent = ({ data }: { data: ArgoCDAppList }) => {
         padding: 'dense',
       }}
       data={data.items}
-      columns={columns}
+      columns={columns.concat(extraColumns)}
     />
   );
 };
 
-const ArgoCDDetails = ({ entity }: { entity: Entity }) => {
+const ArgoCDDetails = ({ entity, extraColumns }: { entity: Entity, extraColumns: TableColumn[] }) => {
   const { url, appName, appSelector, projectName } = useArgoCDAppData({
     entity,
   });
@@ -136,12 +136,12 @@ const ArgoCDDetails = ({ entity }: { entity: Entity }) => {
   }
   if (value) {
     if ((value as ArgoCDAppList).items !== undefined) {
-      return <OverviewComponent data={value as ArgoCDAppList} />;
+      return <OverviewComponent data={value as ArgoCDAppList} extraColumns={extraColumns} />;
     }
     const wrapped: ArgoCDAppList = {
       items: [value as ArgoCDAppDetails],
     };
-    return <OverviewComponent data={wrapped} />;
+    return <OverviewComponent data={wrapped} extraColumns={extraColumns} />;
   }
   return null;
 };
@@ -149,12 +149,12 @@ const ArgoCDDetails = ({ entity }: { entity: Entity }) => {
 /**
  * @deprecated since v0.3.0 you should use new composability API
  */
-export const ArgoCDDetailsWidget = ({ entity }: { entity: Entity }) => {
+export const ArgoCDDetailsWidget = ({ entity, extraColumns }: { entity: Entity, extraColumns?: TableColumn[] }) => {
   return !isArgocdAvailable(entity) ? (
     <MissingAnnotationEmptyState annotation={ARGOCD_ANNOTATION_APP_NAME} />
   ) : (
     <ErrorBoundary>
-      <ArgoCDDetails entity={entity} />
+      <ArgoCDDetails entity={entity} extraColumns={extraColumns || []} />
     </ErrorBoundary>
   );
 };
