@@ -75,11 +75,11 @@ The Argo CD plugin is a part of the Backstage sample app. To start using it for 
 
 1. Add an annotation to the YAML config file of a component. If there is only a single Argo CD application for the component, you can use
     ```yml
-    argo-cd/app-name: <app-name>
+    argocd/app-name: <app-name>
     ```
     You can also use labels to select multiple Argo CD applications for a component:
     ```yml
-    argo-cd/app-selector: <app-selector>
+    argocd/app-selector: <app-selector>
     ```
     **Note:** You can only use one of the options per component.
 
@@ -115,9 +115,9 @@ Add all required auth tokens to environmental variables, in this example, `ARGOC
 
 And then in the following component definition annotations add a line with the url to the desired proxy path:
 ```yml
-argo-cd/proxy-url: '/argocd/api2'
+argocd/proxy-url: '/argocd/api2'
 ```
-`argo-cd/proxy-url` annotation defaults to '/argocd/api' so it's not needed if there is only one proxy config.
+`argocd/proxy-url` annotation defaults to '/argocd/api' so it's not needed if there is only one proxy config.
 
 ## Develop plugin locally
 
