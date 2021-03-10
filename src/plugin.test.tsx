@@ -22,6 +22,7 @@ import {
   UrlPatternDiscovery,
   configApiRef,
   ConfigReader,
+  TableColumn,
 } from '@backstage/core';
 import { render } from '@testing-library/react';
 import { rest } from 'msw';
@@ -92,6 +93,27 @@ describe('argo-cd', () => {
         </ApiProvider>
       );
       expect(await rendered.findByText('guestbook')).toHaveAttribute('href', 'www.example-argocd-url.com/applications/guestbook');
+    });
+
+    it('should display extra column', async () => {
+      worker.use(
+        rest.get('*', (_, res, ctx) => res(ctx.json(getResponseStub)))
+      );
+
+      const extraColumns: TableColumn[] = [
+        {
+          title: "Repo URL",
+          field: "spec.source.repoURL",
+        },
+      ]
+
+      const rendered = render(
+        <ApiProvider apis={apis}>
+          <ArgoCDDetailsWidget entity={getEntityStub} extraColumns={extraColumns} />
+        </ApiProvider>
+      );
+      expect(await rendered.findByText('Repo URL')).toBeInTheDocument();
+      expect(await rendered.findByText('https://github.com/argoproj/argocd-example-apps')).toBeInTheDocument();
     });
 
     it('should display properly failure status codes', async () => {
