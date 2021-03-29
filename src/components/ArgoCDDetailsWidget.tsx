@@ -33,6 +33,7 @@ import ErrorBoundary from './ErrorBoundary';
 import { isArgocdAvailable } from '../Router';
 import { ArgoCDAppDetails, ArgoCDAppList } from '../types';
 import { useAppDetails } from './useAppDetails';
+import SyncIcon from '@material-ui/icons/Sync';
 
 const getElapsedTime = (start: string) => {
   return moment(start).fromNow();
@@ -63,7 +64,13 @@ const State = ({ value }: { value: string }) => {
   );
 };
 
-const OverviewComponent = ({ data, extraColumns }: { data: ArgoCDAppList, extraColumns: TableColumn[] }) => {
+type OverviewComponentProps = {
+  data: ArgoCDAppList;
+  extraColumns: TableColumn[];
+  retry: () => void;
+};
+
+const OverviewComponent = ({ data, extraColumns, retry }: OverviewComponentProps) => {
   const configApi = useApi(configApiRef);
   const baseUrl = configApi.getOptionalString('argocd.baseUrl')
 
@@ -106,6 +113,14 @@ const OverviewComponent = ({ data, extraColumns }: { data: ArgoCDAppList, extraC
       }}
       data={data.items}
       columns={columns.concat(extraColumns)}
+      actions={[
+        {
+          icon: () => <SyncIcon />,
+          tooltip: 'Refresh',
+          isFreeAction: true,
+          onClick: () => retry(),
+        },
+      ]}
     />
   );
 };
@@ -114,7 +129,7 @@ const ArgoCDDetails = ({ entity, extraColumns }: { entity: Entity, extraColumns:
   const { url, appName, appSelector, projectName } = useArgoCDAppData({
     entity,
   });
-  const { loading, value, error } = useAppDetails({
+  const { loading, value, error, retry } = useAppDetails({
     url,
     appName,
     appSelector,
@@ -136,12 +151,12 @@ const ArgoCDDetails = ({ entity, extraColumns }: { entity: Entity, extraColumns:
   }
   if (value) {
     if ((value as ArgoCDAppList).items !== undefined) {
-      return <OverviewComponent data={value as ArgoCDAppList} extraColumns={extraColumns} />;
+      return <OverviewComponent data={value as ArgoCDAppList} retry={retry} extraColumns={extraColumns} />;
     }
     const wrapped: ArgoCDAppList = {
       items: [value as ArgoCDAppDetails],
     };
-    return <OverviewComponent data={wrapped} extraColumns={extraColumns} />;
+    return <OverviewComponent data={wrapped} retry={retry} extraColumns={extraColumns} />;
   }
   return null;
 };

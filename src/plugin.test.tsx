@@ -116,6 +116,34 @@ describe('argo-cd', () => {
       expect(await rendered.findByText('https://github.com/argoproj/argocd-example-apps')).toBeInTheDocument();
     });
 
+    it('should display new data on retry', async () => {
+      worker.use(
+        rest.get('*', (_, res, ctx) => res(ctx.json(getResponseStub)))
+      );
+
+      const rendered = render(
+        <ApiProvider apis={apis}>
+          <ArgoCDDetailsWidget entity={getEntityStub} />
+        </ApiProvider>
+      );
+
+      expect(await rendered.findByText('guestbook')).toBeInTheDocument();
+      expect(await rendered.findByText('Synced')).toBeInTheDocument();
+
+      const nextResponseStub = getResponseStub;
+      nextResponseStub.status.sync.status = "OutOfSync";
+
+      worker.use(
+        rest.get('*', (_, res, ctx) => res(ctx.json(getResponseStub)))
+      );
+
+      const refreshButton = await rendered.findByTitle("Refresh");
+      refreshButton.click();
+
+      expect(await rendered.findByText('guestbook')).toBeInTheDocument();
+      expect(await rendered.findByText('OutOfSync')).toBeInTheDocument();
+    });
+
     it('should display properly failure status codes', async () => {
       worker.use(rest.get('*', (_, res, ctx) => res(ctx.status(403))));
       const rendered = render(
