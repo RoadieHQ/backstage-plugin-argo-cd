@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 import { errorApiRef, useApi } from '@backstage/core';
-import { useAsync } from 'react-use';
+import { useAsyncRetry } from 'react-use';
 import { argoCDApiRef } from '../api';
 
 export const useAppDetails = ({
@@ -31,7 +31,7 @@ export const useAppDetails = ({
   const api = useApi(argoCDApiRef);
   const errorApi = useApi(errorApiRef);
 
-  const { loading, value, error } = useAsync(async () => {
+  const { loading, value, error, retry } = useAsyncRetry(async () => {
     try {
       if (appName) {
         return await api.getAppDetails({ url, appName });
@@ -50,5 +50,6 @@ export const useAppDetails = ({
     loading,
     value,
     error,
+    retry,
   };
 };

@@ -24,7 +24,7 @@ import {
   ConfigReader,
   TableColumn,
 } from '@backstage/core';
-import { render } from '@testing-library/react';
+import { fireEvent, render } from '@testing-library/react';
 import { rest } from 'msw';
 import { setupServer } from 'msw/node';
 import { ArgoCDApiClient, argoCDApiRef } from './api';
@@ -114,6 +114,34 @@ describe('argo-cd', () => {
       );
       expect(await rendered.findByText('Repo URL')).toBeInTheDocument();
       expect(await rendered.findByText('https://github.com/argoproj/argocd-example-apps')).toBeInTheDocument();
+    });
+
+    it('should display new data on retry', async () => {
+      worker.use(
+        rest.get('*', (_, res, ctx) => res(ctx.json(getResponseStub)))
+      );
+
+      const rendered = render(
+        <ApiProvider apis={apis}>
+          <ArgoCDDetailsWidget entity={getEntityStub} />
+        </ApiProvider>
+      );
+
+      expect(await rendered.findByText('guestbook')).toBeInTheDocument();
+      expect(await rendered.findByText('Synced')).toBeInTheDocument();
+
+      const nextResponseStub = getResponseStub;
+      nextResponseStub.status.sync.status = "OutOfSync";
+
+      worker.use(
+        rest.get('*', (_, res, ctx) => res(ctx.json(getResponseStub)))
+      );
+
+      const refreshButton = await rendered.findByTitle("Refresh");
+      fireEvent.click(refreshButton);
+
+      expect(await rendered.findByText('guestbook')).toBeInTheDocument();
+      expect(await rendered.findByText('OutOfSync')).toBeInTheDocument();
     });
 
     it('should display properly failure status codes', async () => {
