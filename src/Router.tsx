@@ -23,20 +23,25 @@ import {
   ARGOCD_ANNOTATION_PROJECT_NAME,
 } from './components/useArgoCDAppData';
 import { MissingAnnotationEmptyState } from '@backstage/core';
+import { useEntity } from "@backstage/plugin-catalog-react";
 
 export const isArgocdAvailable = (entity: Entity) =>
   Boolean(entity?.metadata.annotations?.[ARGOCD_ANNOTATION_APP_NAME]) ||
   Boolean(entity?.metadata.annotations?.[ARGOCD_ANNOTATION_APP_SELECTOR]) ||
   Boolean(entity?.metadata.annotations?.[ARGOCD_ANNOTATION_PROJECT_NAME]);
 
-/**
- * @deprecated since v0.3.0 you should use new composability API
- */
-export const Router = ({ entity }: { entity: Entity }) =>
-  !isArgocdAvailable(entity) ? (
-    <MissingAnnotationEmptyState annotation={ARGOCD_ANNOTATION_APP_NAME} />
+type Props = {
+  /** @deprecated The entity is now grabbed from context instead */
+  entity?: Entity;
+};
+
+export const Router = (_props: Props) => {
+  const {entity} = useEntity();
+  return !isArgocdAvailable(entity) ? (
+      <MissingAnnotationEmptyState annotation={ARGOCD_ANNOTATION_APP_NAME} />
   ) : (
-    <Routes>
-      <Route path="/" element={<ArgoCDHistoryPage entity={entity} />} />
-    </Routes>
+      <Routes>
+        <Route path="/" element={<ArgoCDHistoryPage entity={entity} />} />
+      </Routes>
   );
+}

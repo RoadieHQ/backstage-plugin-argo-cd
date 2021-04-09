@@ -35,6 +35,7 @@ import {
   getResponseStub,
   getResponseStubMissingData,
 } from './mocks/mocks';
+import { EntityProvider } from '@backstage/plugin-catalog-react';
 
 const discoveryApi = UrlPatternDiscovery.compile('http://exampleapi.com');
 const errorApiMock = { post: jest.fn(), error$: jest.fn() };
@@ -68,7 +69,9 @@ describe('argo-cd', () => {
       );
       const rendered = render(
         <ApiProvider apis={apis}>
-          <ArgoCDDetailsWidget entity={getEntityStub} />
+          <EntityProvider entity={getEntityStub}>
+            <ArgoCDDetailsWidget />
+          </EntityProvider>
         </ApiProvider>
       );
       expect(await rendered.findByText('guestbook')).toBeInTheDocument();
@@ -89,7 +92,9 @@ describe('argo-cd', () => {
 
       const rendered = render(
         <ApiProvider apis={apisWithArgoCDBaseURL}>
-          <ArgoCDDetailsWidget entity={getEntityStub} />
+          <EntityProvider entity={getEntityStub}>
+            <ArgoCDDetailsWidget />
+          </EntityProvider>
         </ApiProvider>
       );
       expect(await rendered.findByText('guestbook')).toHaveAttribute('href', 'www.example-argocd-url.com/applications/guestbook');
@@ -109,7 +114,9 @@ describe('argo-cd', () => {
 
       const rendered = render(
         <ApiProvider apis={apis}>
-          <ArgoCDDetailsWidget entity={getEntityStub} extraColumns={extraColumns} />
+          <EntityProvider entity={getEntityStub}>
+            <ArgoCDDetailsWidget extraColumns={extraColumns} />
+          </EntityProvider>
         </ApiProvider>
       );
       expect(await rendered.findByText('Repo URL')).toBeInTheDocument();
@@ -123,7 +130,9 @@ describe('argo-cd', () => {
 
       const rendered = render(
         <ApiProvider apis={apis}>
-          <ArgoCDDetailsWidget entity={getEntityStub} />
+          <EntityProvider entity={getEntityStub}>
+            <ArgoCDDetailsWidget />
+          </EntityProvider>
         </ApiProvider>
       );
 
@@ -148,7 +157,9 @@ describe('argo-cd', () => {
       worker.use(rest.get('*', (_, res, ctx) => res(ctx.status(403))));
       const rendered = render(
         <ApiProvider apis={apis}>
-          <ArgoCDDetailsWidget entity={getEntityStub} />
+          <EntityProvider entity={getEntityStub}>
+            <ArgoCDDetailsWidget />
+          </EntityProvider>
         </ApiProvider>
       );
       expect(await rendered.findByText(/403/)).toBeInTheDocument();
@@ -162,7 +173,9 @@ describe('argo-cd', () => {
       );
       const rendered = render(
         <ApiProvider apis={apis}>
-          <ArgoCDDetailsWidget entity={getEntityStub} />
+          <EntityProvider entity={getEntityStub}>
+            <ArgoCDDetailsWidget />
+          </EntityProvider>
         </ApiProvider>
       );
       expect(

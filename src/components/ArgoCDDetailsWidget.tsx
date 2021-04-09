@@ -34,6 +34,7 @@ import { isArgocdAvailable } from '../Router';
 import { ArgoCDAppDetails, ArgoCDAppList } from '../types';
 import { useAppDetails } from './useAppDetails';
 import SyncIcon from '@material-ui/icons/Sync';
+import { useEntity } from "@backstage/plugin-catalog-react";
 
 const getElapsedTime = (start: string) => {
   return moment(start).fromNow();
@@ -161,15 +162,19 @@ const ArgoCDDetails = ({ entity, extraColumns }: { entity: Entity, extraColumns:
   return null;
 };
 
-/**
- * @deprecated since v0.3.0 you should use new composability API
- */
-export const ArgoCDDetailsWidget = ({ entity, extraColumns }: { entity: Entity, extraColumns?: TableColumn[] }) => {
+type Props = {
+  /** @deprecated The entity is now grabbed from context instead */
+  entity?: Entity;
+  extraColumns?: TableColumn[]
+};
+
+export const ArgoCDDetailsWidget = (props: Props) => {
+  const { entity } = useEntity();
   return !isArgocdAvailable(entity) ? (
     <MissingAnnotationEmptyState annotation={ARGOCD_ANNOTATION_APP_NAME} />
   ) : (
     <ErrorBoundary>
-      <ArgoCDDetails entity={entity} extraColumns={extraColumns || []} />
+      <ArgoCDDetails entity={entity} extraColumns={props.extraColumns || []} />
     </ErrorBoundary>
   );
 };
