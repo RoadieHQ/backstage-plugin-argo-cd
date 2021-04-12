@@ -29,7 +29,7 @@ import { rest } from 'msw';
 import { setupServer } from 'msw/node';
 import { ArgoCDApiClient, argoCDApiRef } from './api';
 import { argocdPlugin } from './plugin';
-import { ArgoCDDetailsWidget } from './components/ArgoCDDetailsWidget';
+import { ArgoCDDetailsCard } from './components/ArgoCDDetailsCard';
 import {
   getEntityStub,
   getResponseStub,
@@ -70,7 +70,7 @@ describe('argo-cd', () => {
       const rendered = render(
         <ApiProvider apis={apis}>
           <EntityProvider entity={getEntityStub}>
-            <ArgoCDDetailsWidget />
+            <ArgoCDDetailsCard />
           </EntityProvider>
         </ApiProvider>
       );
@@ -93,7 +93,7 @@ describe('argo-cd', () => {
       const rendered = render(
         <ApiProvider apis={apisWithArgoCDBaseURL}>
           <EntityProvider entity={getEntityStub}>
-            <ArgoCDDetailsWidget />
+            <ArgoCDDetailsCard />
           </EntityProvider>
         </ApiProvider>
       );
@@ -115,7 +115,7 @@ describe('argo-cd', () => {
       const rendered = render(
         <ApiProvider apis={apis}>
           <EntityProvider entity={getEntityStub}>
-            <ArgoCDDetailsWidget extraColumns={extraColumns} />
+            <ArgoCDDetailsCard extraColumns={extraColumns} />
           </EntityProvider>
         </ApiProvider>
       );
@@ -131,7 +131,7 @@ describe('argo-cd', () => {
       const rendered = render(
         <ApiProvider apis={apis}>
           <EntityProvider entity={getEntityStub}>
-            <ArgoCDDetailsWidget />
+            <ArgoCDDetailsCard />
           </EntityProvider>
         </ApiProvider>
       );
@@ -158,7 +158,7 @@ describe('argo-cd', () => {
       const rendered = render(
         <ApiProvider apis={apis}>
           <EntityProvider entity={getEntityStub}>
-            <ArgoCDDetailsWidget />
+            <ArgoCDDetailsCard />
           </EntityProvider>
         </ApiProvider>
       );
@@ -174,7 +174,7 @@ describe('argo-cd', () => {
       const rendered = render(
         <ApiProvider apis={apis}>
           <EntityProvider entity={getEntityStub}>
-            <ArgoCDDetailsWidget />
+            <ArgoCDDetailsCard />
           </EntityProvider>
         </ApiProvider>
       );

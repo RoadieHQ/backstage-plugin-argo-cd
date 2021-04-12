@@ -36,7 +36,7 @@ type Props = {
 };
 
 export const Router = (_props: Props) => {
-  const {entity} = useEntity();
+  const { entity } = useEntity();
   return !isArgocdAvailable(entity) ? (
       <MissingAnnotationEmptyState annotation={ARGOCD_ANNOTATION_APP_NAME} />
   ) : (

@@ -37,8 +37,8 @@ export const EntityArgoCDOverviewCard = argocdPlugin.provide(
   createComponentExtension({
     component: {
       lazy: () =>
-        import('./components/ArgoCDDetailsWidget').then(
-          (m) => m.ArgoCDDetailsWidget
+        import('./components/ArgoCDDetailsCard').then(
+          (m) => m.ArgoCDDetailsCard
         ),
     },
   })
