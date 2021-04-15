@@ -52,18 +52,20 @@ export { plugin as ArgoCD } from '@roadiehq/backstage-plugin-argo-cd';
 ```ts
 // packages/app/src/components/catalog/EntityPage.tsx
 import {
-  ArgoCDDetailsWidget,
+  EntityArgoCDOverviewCard,
   isArgocdAvailable
 } from '@roadiehq/backstage-plugin-argo-cd';
 
-const OverviewContent = ({ entity }: { entity: Entity }) => (
+const overviewContent = (
   <Grid container spacing={3} alignItems="stretch">
     ...
-    {isArgocdAvailable(entity) && (
-      <Grid item md={6}>
-        <ArgoCDDetailsWidget entity={entity} />
-      </Grid>
-    )}
+      <EntitySwitch>
+        <EntitySwitch.Case if={e => Boolean(isArgocdAvailable(e))}>
+          <Grid item sm={4}>
+            <EntityArgoCDOverviewCard />
+          </Grid>
+        </EntitySwitch.Case>
+     </EntitySwitch>
     ...
   </Grid>
 );
