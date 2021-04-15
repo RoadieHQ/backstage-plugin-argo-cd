@@ -943,10 +943,34 @@
     "@backstage/errors" "^0.1.1"
     cross-fetch "^3.0.6"
 
+"@backstage/catalog-client@^0.3.9":
+  version "0.3.9"
+  resolved "https://registry.yarnpkg.com/@backstage/catalog-client/-/catalog-client-0.3.9.tgz#12c79ec5c04354d6b3eecb5fbf7a5bbe7f8a5420"
+  integrity sha512-fKpMdLhZDxuFI0xtW58lE8f3Bum7n9Gc0Jhsu53bw5uVKghfiCLP0QKTaXc0z7Ml2LHixegsA+H2GlWLVohqtQ==
+  dependencies:
+    "@backstage/catalog-model" "^0.7.5"
+    "@backstage/config" "^0.1.4"
+    "@backstage/errors" "^0.1.1"
+    cross-fetch "^3.0.6"
+
 "@backstage/catalog-model@^0.7.3", "@backstage/catalog-model@^0.7.4":
   version "0.7.4"
   resolved "https://registry.yarnpkg.com/@backstage/catalog-model/-/catalog-model-0.7.4.tgz#e3cd532ef9e3f27725816985baf2937c7e1a4bcd"
   integrity sha512-KnQidJLJIBWRqYAkbFASLI5JxXi3FLMUWvxtUnN9HbAEzLFYbBqsKz+AIN38vTJoVryaWTKtMI10/vCMLRP7uA==
+  dependencies:
+    "@backstage/config" "^0.1.3"
+    "@types/json-schema" "^7.0.5"
+    "@types/yup" "^0.29.8"
+    ajv "^7.0.3"
+    json-schema "^0.2.5"
+    lodash "^4.17.15"
+    uuid "^8.0.0"
+    yup "^0.29.3"
+
+"@backstage/catalog-model@^0.7.5":
+  version "0.7.6"
+  resolved "https://registry.yarnpkg.com/@backstage/catalog-model/-/catalog-model-0.7.6.tgz#ce2b8ddd9a9f9d9da8e079df581265817dbdeb19"
+  integrity sha512-Tfs0Dtz9L3YPXTBsoSvNo699DXyHFKw1NPzNL0IDwGxrnFKpBBKAazXMJ2NwA2En5XldtLaDZhCOty2XMLwsNQ==
   dependencies:
     "@backstage/config" "^0.1.3"
     "@types/json-schema" "^7.0.5"
@@ -1175,6 +1199,21 @@
   dependencies:
     "@backstage/catalog-client" "^0.3.8"
     "@backstage/catalog-model" "^0.7.3"
+    "@backstage/core" "^0.7.3"
+    "@material-ui/core" "^4.11.0"
+    "@types/react" "^16.9"
+    react "^16.13.1"
+    react-router "6.0.0-beta.0"
+    react-router-dom "6.0.0-beta.0"
+    react-use "^15.3.3"
+
+"@backstage/plugin-catalog-react@^0.1.4":
+  version "0.1.4"
+  resolved "https://registry.yarnpkg.com/@backstage/plugin-catalog-react/-/plugin-catalog-react-0.1.4.tgz#4e136ff8c5e2b0a264b9a94c32e65def5c3f4609"
+  integrity sha512-JOVXrSddjIVJ8UoGmzpy0VHHMMgU9b5+ukK8Lj8ry9ESUDTxOTvSaKKgpkskuXbTh7+FkBsEfJLY4J3QQGgB/Q==
+  dependencies:
+    "@backstage/catalog-client" "^0.3.9"
+    "@backstage/catalog-model" "^0.7.5"
     "@backstage/core" "^0.7.3"
     "@material-ui/core" "^4.11.0"
     "@types/react" "^16.9"

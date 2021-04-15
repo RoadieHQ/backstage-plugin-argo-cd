@@ -44,7 +44,7 @@ argocd:
 
 ```ts
 // packages/app/src/plugins.ts
-export { plugin as ArgoCD } from '@roadiehq/backstage-plugin-argo-cd';
+export { argocdPlugin } from '@roadiehq/backstage-plugin-argo-cd';
 ```
 
 4. Add plugin to the `entityPage.tsx` source file:
