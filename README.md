@@ -59,13 +59,13 @@ import {
 const overviewContent = (
   <Grid container spacing={3} alignItems="stretch">
     ...
-      <EntitySwitch>
-        <EntitySwitch.Case if={e => Boolean(isArgocdAvailable(e))}>
-          <Grid item sm={4}>
-            <EntityArgoCDOverviewCard />
-          </Grid>
-        </EntitySwitch.Case>
-     </EntitySwitch>
+    <EntitySwitch>
+      <EntitySwitch.Case if={e => Boolean(isArgocdAvailable(e))}>
+        <Grid item sm={4}>
+          <EntityArgoCDOverviewCard />
+        </Grid> 
+      </EntitySwitch.Case> 
+    </EntitySwitch>
     ...
   </Grid>
 );
