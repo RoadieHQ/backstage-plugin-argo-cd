@@ -16,7 +16,6 @@
 import React from 'react';
 import { Entity } from '@backstage/catalog-model';
 import { Routes, Route } from 'react-router-dom';
-import { ArgoCDHistoryPage } from './components/ArgoCDHistoryPage';
 import {
   ARGOCD_ANNOTATION_APP_NAME,
   ARGOCD_ANNOTATION_APP_SELECTOR,
@@ -24,6 +23,7 @@ import {
 } from './components/useArgoCDAppData';
 import { MissingAnnotationEmptyState } from '@backstage/core';
 import { useEntity } from "@backstage/plugin-catalog-react";
+import { ArgoCDHistoryCard } from './components/ArgoCDHistoryCard';
 
 export const isArgocdAvailable = (entity: Entity) =>
   Boolean(entity?.metadata.annotations?.[ARGOCD_ANNOTATION_APP_NAME]) ||
@@ -41,7 +41,7 @@ export const Router = (_props: Props) => {
       <MissingAnnotationEmptyState annotation={ARGOCD_ANNOTATION_APP_NAME} />
   ) : (
       <Routes>
-        <Route path="/" element={<ArgoCDHistoryPage entity={entity} />} />
+        <Route path="/" element={<ArgoCDHistoryCard />} />
       </Routes>
   );
 }

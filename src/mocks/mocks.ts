@@ -122,6 +122,7 @@ export const getResponseStub = {
     history: [
       {
         revision: '6bed858de32a0e876ec49dad1a2e3c5840d3fb07',
+        deployStartedAt: '2020-11-18T16:47:02Z',
         deployedAt: '2020-11-18T16:47:04Z',
         id: 0,
         source: {
