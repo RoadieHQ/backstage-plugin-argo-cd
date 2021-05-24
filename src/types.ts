@@ -14,8 +14,7 @@ export const argoCDAppDetails = t.type({
     }),
     history: t.array(t.type({
       id: t.number,
-      revision: t.string,
-      deployedAt: t.string,
+      revision: t.string
     })),
   }),
 });
