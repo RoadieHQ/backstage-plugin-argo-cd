@@ -35,7 +35,7 @@
     "@material-ui/lab": "4.0.0-alpha.45",
     "cross-fetch": "^3.1.4",
     "date-fns": "^2.21.1",
-    "fp-ts": "^2.9.5",
+    "fp-ts": "^2.10.0",
     "history": "^5.0.0",
     "io-ts": "^2.2.16",
     "io-ts-promise": "^2.0.2",
