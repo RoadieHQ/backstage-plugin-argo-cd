@@ -52,8 +52,17 @@ const HistoryTable = ({data, retry}: {data: ArgoCDAppList, retry: () => void}) =
       title: 'Deploy Started',
       field: 'deployStartedAt',
       render: (row: any) => (
-        <Tooltip title={row.deployStartedAt} placement="left">
-          <div>{moment(row.deployStartedAt).fromNow()}</div>
+        <Tooltip title={row.deployStartedAt ? row.deployStartedAt : "Deploy started at"} placement="left">
+          <div>{row.deployStartedAt? moment(row.deployStartedAt).fromNow(): "-"}</div>
+        </Tooltip>
+      )
+    },
+    {
+      title: 'Deployed At',
+      field: 'deployedAt',
+      render: (row: any) => (
+        <Tooltip title={row.deployedAt} placement="left">
+          <div>{moment(row.deployedAt).fromNow()}</div>
         </Tooltip>
       )
     },
