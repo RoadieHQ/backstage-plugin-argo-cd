@@ -43,3 +43,14 @@ export const EntityArgoCDOverviewCard = argocdPlugin.provide(
     },
   })
 );
+
+export const EntityArgoCDHistoryCard = argocdPlugin.provide(
+  createComponentExtension({
+    component: {
+      lazy: () =>
+        import('./components/ArgoCDHistoryCard').then(
+          (m) => m.ArgoCDHistoryCard
+        ),
+    },
+  })
+);
