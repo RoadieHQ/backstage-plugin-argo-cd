@@ -16,14 +16,19 @@
 
 import React from 'react';
 import {
+  TableColumn,
+} from '@backstage/core-components';
+import {
+  configApiRef,
+  errorApiRef,
+} from '@backstage/core-plugin-api';
+import {
   ApiProvider,
   ApiRegistry,
-  errorApiRef,
   UrlPatternDiscovery,
-  configApiRef,
   ConfigReader,
-  TableColumn,
-} from '@backstage/core';
+} from '@backstage/core-app-api';
+
 import { fireEvent, render } from '@testing-library/react';
 import { rest } from 'msw';
 import { setupServer } from 'msw/node';

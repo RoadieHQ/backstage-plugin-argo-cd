@@ -22,13 +22,15 @@ import {
   useArgoCDAppData,
 } from './useArgoCDAppData';
 import {
-  configApiRef,
   InfoCard,
   MissingAnnotationEmptyState,
   Table,
   TableColumn,
+} from '@backstage/core-components';
+import {
+  configApiRef,
   useApi,
-} from '@backstage/core';
+} from '@backstage/core-plugin-api';
 import ErrorBoundary from './ErrorBoundary';
 import { isArgocdAvailable } from '../Router';
 import { ArgoCDAppDetails, ArgoCDAppList } from '../types';

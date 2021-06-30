@@ -1,4 +1,4 @@
-import { createApiRef, DiscoveryApi } from '@backstage/core';
+import { createApiRef, DiscoveryApi } from '@backstage/core-plugin-api';
 import {
   argoCDAppDetails,
   ArgoCDAppDetails,
