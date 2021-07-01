@@ -21,7 +21,7 @@ import {
   ARGOCD_ANNOTATION_APP_SELECTOR,
   ARGOCD_ANNOTATION_PROJECT_NAME,
 } from './components/useArgoCDAppData';
-import { MissingAnnotationEmptyState } from '@backstage/core';
+import { MissingAnnotationEmptyState } from '@backstage/core-components';
 import { useEntity } from "@backstage/plugin-catalog-react";
 import { ArgoCDHistoryCard } from './components/ArgoCDHistoryCard';
 

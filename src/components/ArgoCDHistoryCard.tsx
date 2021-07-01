@@ -15,7 +15,17 @@
  */
 
 import { Entity } from '@backstage/catalog-model';
-import { configApiRef, ErrorBoundary, InfoCard, MissingAnnotationEmptyState, Table, TableColumn, useApi } from '@backstage/core';
+import {
+  InfoCard,
+  ErrorBoundary,
+  MissingAnnotationEmptyState,
+  Table,
+  TableColumn,
+} from '@backstage/core-components';
+import {
+  configApiRef,
+  useApi,
+} from '@backstage/core-plugin-api';
 import { useEntity } from '@backstage/plugin-catalog-react';
 import { LinearProgress, Tooltip, Link } from '@material-ui/core';
 import React from 'react';

@@ -5,7 +5,7 @@ import {
   createRoutableExtension,
   createRouteRef,
   discoveryApiRef,
-} from '@backstage/core';
+} from '@backstage/core-plugin-api';
 import { ArgoCDApiClient, argoCDApiRef } from './api';
 
 export const entityContentRouteRef = createRouteRef({
