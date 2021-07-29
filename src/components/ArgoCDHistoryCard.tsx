@@ -40,14 +40,18 @@ const HistoryTable = ({data, retry}: {data: ArgoCDAppList, retry: () => void}) =
   const configApi = useApi(configApiRef);
   const baseUrl = configApi.getOptionalString('argocd.baseUrl')
 
-  const history = data.items.map(app => {
-    return app.status.history.map(entry => {
-      return {
-        app: app.metadata.name,
-        ...entry
-      };
-    });
-  }).flat();
+  const history = data.items
+  ? data.items
+      .map(app => {
+        return app.status.history.map(entry => {
+          return {
+            app: app.metadata.name,
+            ...entry,
+          };
+        });
+      })
+      .flat()
+  : [];
 
   const columns: TableColumn[] = [
     {

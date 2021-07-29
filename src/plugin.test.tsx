@@ -39,6 +39,8 @@ import {
   getEntityStub,
   getResponseStub,
   getResponseStubMissingData,
+  getEntityStubWithAppSelector,
+  getEmptyResponseStub,
 } from './mocks/mocks';
 import { EntityProvider } from '@backstage/plugin-catalog-react';
 
@@ -83,6 +85,23 @@ describe('argo-cd', () => {
       expect(await rendered.findByText('guestbook')).not.toHaveAttribute("href");
       expect(await rendered.findByText('Synced')).toBeInTheDocument();
       expect(await rendered.findByText('Healthy')).toBeInTheDocument();
+    });
+
+    it("should display empty table when no item returned with app selector", async () => {
+      worker.use(
+        rest.get("*", (_, res, ctx) => res(ctx.json(getEmptyResponseStub)))
+      );
+      const rendered = render(
+        <ApiProvider apis={apis}>
+          <EntityProvider entity={getEntityStubWithAppSelector}>
+            <ArgoCDDetailsCard />
+          </EntityProvider>
+        </ApiProvider>
+      );
+
+      expect(
+        await rendered.findByText("No records to display")
+      ).toBeInTheDocument();
     });
 
     it('should display link to argo cd source', async () => {

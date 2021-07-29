@@ -24,7 +24,7 @@ export const argoCDAppDetails = t.type({
 export type ArgoCDAppDetails = t.TypeOf<typeof argoCDAppDetails>;
 
 export const argoCDAppList = t.type({
-  items: t.array(argoCDAppDetails),
+  items: t.union([t.array(argoCDAppDetails), t.null]),
 });
 
 export type ArgoCDAppList = t.TypeOf<typeof argoCDAppList>;
