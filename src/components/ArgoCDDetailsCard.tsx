@@ -114,7 +114,7 @@ const OverviewComponent = ({ data, extraColumns, retry }: OverviewComponentProps
         draggable: false,
         padding: 'dense',
       }}
-      data={data.items}
+      data={data.items || []}
       columns={columns.concat(extraColumns)}
       actions={[
         {
